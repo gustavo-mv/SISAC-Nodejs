@@ -3,7 +3,10 @@ const router = express.Router();
 const professorController = require("./controllers/professorController");
 const alunoController = require("./controllers/alunoController");
 const coordenadorController = require("./controllers/coordenadorController");
+const loginController = require("./controllers/loginController");
 const app = require("./app");
+
+router.post("/loginprofessor/", loginController.loginProfessor);
 
 //Consultar todas as disciplinas:
 router.get(
@@ -20,6 +23,7 @@ router.get(
   "/professor/:idmateria?/alunos",
   professorController.alunosUmaDisciplina
 );
+
 router.post("/professor/faltas", professorController.adicionarFaltas);
 
 module.exports = router;

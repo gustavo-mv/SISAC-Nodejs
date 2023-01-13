@@ -34,9 +34,30 @@ const adicionarFaltas = async (carga, id, materia) => {
   );
   return result;
 };
+
+const loginProfessor = async (usuario, senha) => {
+  if (usuario && senha) {
+    const result = await connection.execute(
+      "SELECT * FROM professores WHERE usuario = ? AND senha = ?",
+      [usuario, senha],
+      (err, results, fields) => {
+        if (err) {
+          throw err;
+        }
+        if (results) {
+          return "Erro";
+        }
+      }
+    );
+    return "Olá";
+  }
+  return "Usuário ou senha Inválidos";
+};
+
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,
+  loginProfessor,
   consultarAlunosDisciplina,
   adicionarFaltas,
 };
