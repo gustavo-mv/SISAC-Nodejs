@@ -8,6 +8,9 @@ const app = require("./app");
 
 router.post("/loginprofessor/", loginController.loginProfessor);
 
+router.get("/", (req, res) => {
+  res.send("Olá mundo");
+});
 //Consultar todas as disciplinas:
 router.get(
   "/professor/:idprofessor?/disciplinas",
@@ -25,5 +28,7 @@ router.get(
 );
 
 router.post("/professor/faltas", professorController.adicionarFaltas);
+
+router.post("/aluno/presenca", alunoController.adicionarPresenca);
 
 module.exports = router;
