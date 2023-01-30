@@ -57,12 +57,21 @@ const todasAsAulas = async (idProf) => {
   return result;
 };
 
-const addAula = async (idmateria, carga, data) => {
+const addAula = async (idMateria, carga, data) => {
   await connection.execute(
     "INSERT INTO `aulas`( `data`, `carga`, `materia_idmateria`) VALUES (?,?,?)",
-    [data, carga, idmateria]
+    [data, carga, idMateria]
   );
   return "Aula adicionada com sucesso.";
+};
+
+const consultarAulaDisciplina = async (idMateria) => {
+  const result = await connection.execute(
+    `SELECT * FROM aulas WHERE materia_idmateria = ${idMateria} && !finalizada`
+  );
+  if (Object.keys(result[0]).length === 0) {
+    return "Não há aulas finalizadas com o ID dessa matéria";
+  } else return result[0];
 };
 
 const loginProfessor = async (usuario, senha) => {
@@ -93,4 +102,5 @@ module.exports = {
   verTodosAlunos,
   fecharAula,
   addAula,
+  consultarAulaDisciplina,
 };

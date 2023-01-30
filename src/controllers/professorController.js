@@ -45,11 +45,17 @@ const fecharAula = async (req, res) => {
   return res.status(201).json(result);
 }; */
 
+const consultarAulaDisciplina = async (req, res) => {
+  const idMateria = req.body.idMateria;
+  const result = await professorModel.consultarAulaDisciplina(idMateria);
+  return res.status(201).json(result);
+};
+
 const addAula = async (req, res) => {
   const data = req.body.data;
-  const idmateria = req.body.idmateria;
+  const idMateria = req.body.idMateria;
   const carga = req.body.carga;
-  const result = await professorModel.addAula(idmateria, carga, data);
+  const result = await professorModel.addAula(idMateria, carga, data);
   return res.status(201).json(result);
 };
 
@@ -61,4 +67,5 @@ module.exports = {
   verTodosAlunos,
   fecharAula,
   addAula,
+  consultarAulaDisciplina,
 };
