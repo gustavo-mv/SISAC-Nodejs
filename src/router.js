@@ -13,24 +13,21 @@ router.get("/", (req, res) => {
 });
 //Consultar todas as disciplinas:
 router.get(
-  "/professor/:idprofessor?/disciplinas",
+  "/professor/:idProf?/disciplinas",
   professorController.todasAsDisciplinas
 );
 
-router.get(
-  "/professor/:idprofessor?/alunos",
-  professorController.verTodosAlunos
-);
+router.get("/professor/:idProf?/alunos", professorController.verTodosAlunos);
 
 //Consultar todas as presenças:
 router.get(
-  "/professor/:idprofessor?/presencas",
+  "/professor/:idProf?/presencas",
   professorController.todasAsPresencas
 );
 
 //Consultar todas os Alunos de uma disciplinas:
 router.get(
-  "/professor/:idmateria?/alunos",
+  "/professor/:idProf?/:idMateria?/",
   professorController.alunosUmaDisciplina
 );
 router.post("/professor/:idProf?/adicionarAula/", professorController.addAula);

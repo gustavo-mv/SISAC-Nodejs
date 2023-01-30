@@ -1,17 +1,17 @@
 const professorModel = require("../models/professorModel");
 
 const todasAsDisciplinas = async (req, res) => {
-  const idProfessor = req.params.idprofessor;
+  const idProfessor = req.params.idProf;
   const professores = await professorModel.pegarDisciplinas(idProfessor);
   return res.status(200).json(professores);
 };
 const todasAsPresencas = async (req, res) => {
-  const idProfessor = req.params.idprofessor;
+  const idProfessor = req.params.idProf;
   const presencas = await professorModel.consultarPresencas(idProfessor);
   return res.status(200).json(presencas);
 };
 const alunosUmaDisciplina = async (req, res) => {
-  const idMateria = req.params.idmateria;
+  const idMateria = req.params.idMateria;
   const alunos = await professorModel.consultarAlunosDisciplina(idMateria);
   return res.status(200).json(alunos);
 };
@@ -24,7 +24,7 @@ const adicionarFaltas = async (req, res) => {
   return res.status(201).json("Faltas aplicadas com sucesso!");
 };
 const verTodosAlunos = async (req, res) => {
-  const idProf = req.body.idprofessor;
+  const idProf = req.body.idProf;
   const result = await professorModel.verTodosAlunos(idProf);
   return res.status(201).json(result);
 };
