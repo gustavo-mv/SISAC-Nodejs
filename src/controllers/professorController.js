@@ -23,10 +23,42 @@ const adicionarFaltas = async (req, res) => {
   await professorModel.adicionarFaltas(carga, id, materia);
   return res.status(201).json("Faltas aplicadas com sucesso!");
 };
+const verTodosAlunos = async (req, res) => {
+  const idProf = req.body.idprofessor;
+  const result = await professorModel.verTodosAlunos(idProf);
+  return res.status(201).json(result);
+};
+
+const fecharAula = async (req, res) => {
+  const idAula = req.body.idAula;
+  if (idAula) {
+    const result = await professorModel.fecharAula(idAula);
+    return res.status(201).json(result);
+  } else {
+    return "O id dessa aula não é válido.";
+  }
+};
+
+/* const todasAsAulas = async (req, res) => {
+  const idProf = req.params.idprofessor;
+  const result = await professorModel.todasAsAulas(idProf);
+  return res.status(201).json(result);
+}; */
+
+const addAula = async (req, res) => {
+  const data = req.body.data;
+  const idmateria = req.body.idmateria;
+  const carga = req.body.carga;
+  const result = await professorModel.addAula(idmateria, carga, data);
+  return res.status(201).json(result);
+};
 
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
   alunosUmaDisciplina,
   adicionarFaltas,
+  verTodosAlunos,
+  fecharAula,
+  addAula,
 };

@@ -35,6 +35,36 @@ const adicionarFaltas = async (carga, id, materia) => {
   return result;
 };
 
+const verTodosAlunos = async (idProf) => {
+  const [result] = await connection.execute(
+    `SELECT * FROM alunos ORDER BY nome`
+  );
+  return result;
+};
+
+const fecharAula = async (idAula) => {
+  await connection.execute(
+    "UPDATE `aulas` SET `finalizada` = 1 WHERE idAulas = ?",
+    [idAula]
+  );
+  return "Aula encerrada com sucesso.";
+};
+
+const todasAsAulas = async (idProf) => {
+  const [result] = await connection.execute(
+    "SELECT aulas.idAulas, aulas.materia_idmateria, aulas.carga, aulas.data, materia.nome as Disciplina, Aulas.alunosFaltantes FROM Aulas INNER JOIN Materia ON Materia.idMateria = 1"
+  );
+  return result;
+};
+
+const addAula = async (idmateria, carga, data) => {
+  await connection.execute(
+    "INSERT INTO `aulas`( `data`, `carga`, `materia_idmateria`) VALUES (?,?,?)",
+    [data, carga, idmateria]
+  );
+  return "Aula adicionada com sucesso.";
+};
+
 const loginProfessor = async (usuario, senha) => {
   if (usuario && senha) {
     const result = await connection.execute(
@@ -60,4 +90,7 @@ module.exports = {
   loginProfessor,
   consultarAlunosDisciplina,
   adicionarFaltas,
+  verTodosAlunos,
+  fecharAula,
+  addAula,
 };
