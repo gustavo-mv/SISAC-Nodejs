@@ -50,13 +50,6 @@ const fecharAula = async (idAula) => {
   return "Aula encerrada com sucesso.";
 };
 
-const todasAsAulas = async (idProf) => {
-  const [result] = await connection.execute(
-    "SELECT aulas.idAulas, aulas.materia_idmateria, aulas.carga, aulas.data, materia.nome as Disciplina, Aulas.alunosFaltantes FROM Aulas INNER JOIN Materia ON Materia.idMateria = 1"
-  );
-  return result;
-};
-
 const addAula = async (idMateria, carga, data) => {
   await connection.execute(
     "INSERT INTO `aulas`( `data`, `carga`, `materia_idmateria`) VALUES (?,?,?)",
@@ -74,9 +67,21 @@ const consultarAulaDisciplina = async (idMateria) => {
   } else return result[0];
 };
 
+const adicionarNaMateria = async (idAluno, idMateria) => {
+  if (idAluno !== undefined && idMateria !== undefined) {
+    await connection.execute(
+      "INSERT INTO `presencas`(`alunos_idalunos`,`materia_idmateria`) VALUES (?,?)",
+      [idAluno, idMateria]
+    );
+    return "Adicionado com sucesso na aula";
+  } else {
+    return "O ID do aluno ou ID da Matéria são inválidos";
+  }
+};
+
 const loginProfessor = async (usuario, senha) => {
   if (usuario && senha) {
-    const result = await connection.execute(
+    await connection.query(
       "SELECT * FROM professores WHERE usuario = ? AND senha = ?",
       [usuario, senha],
       (err, results, fields) => {
@@ -86,11 +91,12 @@ const loginProfessor = async (usuario, senha) => {
         if (results) {
           return "Erro";
         }
+        if (fields) {
+          return "opa";
+        }
       }
     );
-    return "Olá";
   }
-  return "Usuário ou senha Inválidos";
 };
 
 module.exports = {
@@ -103,4 +109,5 @@ module.exports = {
   fecharAula,
   addAula,
   consultarAulaDisciplina,
+  adicionarNaMateria,
 };

@@ -39,12 +39,6 @@ const fecharAula = async (req, res) => {
   }
 };
 
-/* const todasAsAulas = async (req, res) => {
-  const idProf = req.params.idprofessor;
-  const result = await professorModel.todasAsAulas(idProf);
-  return res.status(201).json(result);
-}; */
-
 const consultarAulaDisciplina = async (req, res) => {
   const idMateria = req.body.idMateria;
   const result = await professorModel.consultarAulaDisciplina(idMateria);
@@ -59,6 +53,13 @@ const addAula = async (req, res) => {
   return res.status(201).json(result);
 };
 
+const adicionarNaMateria = async (req, res) => {
+  const idAluno = req.body.idAluno;
+  const idMateria = req.body.idMateria;
+  const result = await professorModel.adicionarNaMateria(idMateria, idAluno);
+  return res.status(201).json(result);
+};
+
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
@@ -68,4 +69,5 @@ module.exports = {
   fecharAula,
   addAula,
   consultarAulaDisciplina,
+  adicionarNaMateria,
 };

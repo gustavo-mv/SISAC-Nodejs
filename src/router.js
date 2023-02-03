@@ -34,6 +34,10 @@ router.post(
   "/professor/:idProf?/consultarAula/",
   professorController.consultarAulaDisciplina
 );
+router.post(
+  "/professor/:idProf?/adicionarNaMateria/",
+  professorController.adicionarNaMateria
+);
 router.post("/professor/:idProf?/adicionarAula/", professorController.addAula);
 router.post("/professor/:idProf?/fecharAula", professorController.fecharAula);
 router.post("/professor/:idProf?/faltas", professorController.adicionarFaltas);
