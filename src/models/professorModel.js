@@ -80,23 +80,16 @@ const adicionarNaMateria = async (idAluno, idMateria) => {
 };
 
 const loginProfessor = async (usuario, senha) => {
-  if (usuario && senha) {
-    await connection.query(
-      "SELECT * FROM professores WHERE usuario = ? AND senha = ?",
-      [usuario, senha],
-      (err, results, fields) => {
-        if (err) {
-          throw err;
-        }
-        if (results) {
-          return "Erro";
-        }
-        if (fields) {
-          return "opa";
-        }
-      }
-    );
-  }
+    const sql = "SELECT * FROM professores WHERE usuario = ? AND senha = ?";
+    result = await connection.query(sql,[usuario, senha])
+    if(result[0].length < 1){
+      return "Credenciais Incorretas."
+    }
+const mapaUsuario = {
+     "idprofessor": result[0][0]["idprofessor"],
+     "nome": result[0][0]["nome"]
+}
+      return mapaUsuario
 };
 
 module.exports = {

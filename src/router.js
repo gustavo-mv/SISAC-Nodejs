@@ -6,7 +6,7 @@ const coordenadorController = require("./controllers/coordenadorController");
 const loginController = require("./controllers/loginController");
 const app = require("./app");
 
-router.post("/loginprofessor/", loginController.loginProfessor);
+router.post("/professor/login/", loginController.loginProfessor);
 
 router.get("/", (req, res) => {
   res.send("Olá mundo");
