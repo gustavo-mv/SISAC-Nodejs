@@ -20,6 +20,19 @@ const consultarPresencas = async (idAluno) => {
   }
 };
 
+const consultarAulasAbertas = async (idAluno) => {
+  if (idAluno) {
+    const result = await connection.execute(
+    `SELECT materia.nome as Disciplina, aulas.data AS Dia, 
+    aulas.idaulas, alunos.idalunos FROM aulas INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria 
+    INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos
+    WHERE NOT aulas.finalizada AND alunos.idalunos = ${idAluno}`);
+    return result[0];
+  } else {
+    return "O id é inválido.";
+  }
+};
+
 const verPresencaJaMarcada = async (idAluno, idAula) => {
   const result = await connection.execute(
     `SELECT alunospresentes.idalunos FROM aulas INNER JOIN alunospresentes ON aulas.idAulas = alunospresentes.aulas_idAulas WHERE aulas.idAulas = ${idAula} AND alunospresentes.idalunos = ${idAluno}`
@@ -43,4 +56,5 @@ module.exports = {
   consultarPresencas,
   verPresencaJaMarcada,
   verTodasDisciplinas,
+  consultarAulasAbertas
 };

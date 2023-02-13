@@ -85,6 +85,7 @@ const loginProfessor = async (usuario, senha) => {
     if(result[0].length < 1){
       return "Credenciais Incorretas."
     }
+
 const mapaUsuario = {
      "idprofessor": result[0][0]["idprofessor"],
      "nome": result[0][0]["nome"]

@@ -16,6 +16,13 @@ const consultarPresencas = async (req, res) => {
       .status(500)
       .json("O id está inexistente ou não é um tipo aceitável");
 };
+
+const consultarAulasAbertas = async (req, res) => {
+  const idAluno = req.params.idAluno;
+  const result = await alunoModel.consultarAulasAbertas(idAluno);
+  return res.status(200).json(result);
+};
+
 const verPresencaMarcada = async (req, res) => {
   const idAluno = req.body.idAluno;
   const idAula = req.body.idAula;
@@ -43,4 +50,5 @@ module.exports = {
   consultarPresencas,
   verPresencaMarcada,
   verTodasDisciplinas,
+  consultarAulasAbertas,
 };
