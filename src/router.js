@@ -3,6 +3,7 @@ const router = express.Router();
 const professorController = require("./controllers/professorController");
 const alunoController = require("./controllers/alunoController");
 const coordenadorController = require("./controllers/coordenadorController");
+const administradorController = require("./controllers/administradorController");
 const loginController = require("./controllers/loginController");
 const app = require("./app");
 
@@ -63,5 +64,15 @@ router.post("/professor/:idProf?/faltas", professorController.adicionarFaltas);
 router.post("/aluno/presenca", alunoController.adicionarPresenca);
 
 router.post("/aluno/presencaMarcada", alunoController.verPresencaMarcada);
+
+
+router.post("/coordenador/alunos/", coordenadorController.criarAluno);
+
+router.post("/administrador/professores/", administradorController.criarProfessor);
+router.delete("/administrador/professores/", administradorController.deletarProfessor);
+router.get("/administrador/polos/", administradorController.verPolos);
+router.post("/administrador/polos/", administradorController.criarPolo);
+router.delete("/administrador/polos/", administradorController.deletarPolo);
+router.put("/administrador/polos/", administradorController.editarPolo);
 
 module.exports = router;

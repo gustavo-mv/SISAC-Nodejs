@@ -1,4 +1,5 @@
 const connection = require("./connection");
+const bcrypt = require('bcrypt')
 
 const pegarDisciplinas = async (idProfessor) => {
   if (idProfessor != null) {
@@ -37,9 +38,6 @@ const consultarAlunosDisciplina = async (idMateria) => {
     return result;
   }
 };
-
-
-
 
 const adicionarFaltas = async (carga, id, materia) => {
   const [result] = await connection.execute(
@@ -94,17 +92,23 @@ const adicionarNaMateria = async (idAluno, idMateria) => {
 };
 
 const loginProfessor = async (usuario, senha) => {
-    const sql = "SELECT * FROM professores WHERE usuario = ? AND senha = ?";
-    result = await connection.query(sql,[usuario, senha])
+    const sql = "SELECT * FROM professores WHERE usuario = ?";
+    result = await connection.query(sql,[usuario])
     if(result[0].length < 1){
       return "Credenciais Incorretas."
+    }else{
+      const validarSenha = await bcrypt.compare(senha,result[0][0]["senha"]);
+      if(validarSenha) {
+        const mapaUsuario = {
+          "idprofessor": result[0][0]["idprofessor"],
+          "nome": result[0][0]["nome"]
+     }
+           return mapaUsuario
+      }else{
+        return "Credenciais Incorretas."
+      }
     }
 
-const mapaUsuario = {
-     "idprofessor": result[0][0]["idprofessor"],
-     "nome": result[0][0]["nome"]
-}
-      return mapaUsuario
 };
 
 module.exports = {
@@ -120,3 +124,4 @@ module.exports = {
   adicionarNaMateria,
   consultarAlunosPresentes
 };
+//     const validarSenha = await bcrypt.compare(senha,)
