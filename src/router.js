@@ -7,6 +7,8 @@ const loginController = require("./controllers/loginController");
 const app = require("./app");
 
 router.post("/professor/login/", loginController.loginProfessor);
+router.post("/aluno/login/", loginController.loginAluno);
+
 
 router.get("/", (req, res) => {
   res.send("Olá mundo");
@@ -41,6 +43,10 @@ router.get("/aluno/:idAluno?/presenca", alunoController.consultarPresencas);
 router.post(
   "/professor/:idProf?/consultarAula/",
   professorController.consultarAulaDisciplina
+);
+router.post(
+  "/professor/:idProf?/alunosPresentes/",
+  professorController.consultarAlunosPresentes
 );
 
 router.post(

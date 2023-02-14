@@ -41,6 +41,7 @@ const verPresencaJaMarcada = async (idAluno, idAula) => {
     return "Não há presença por aqui.";
   } else return result[0];
 };
+
 const verTodasDisciplinas = async (idAluno) => {
   const result =
     await connection.execute(`SELECT materia.nome as Disciplina, presencas.faltas as Faltas
@@ -51,10 +52,26 @@ const verTodasDisciplinas = async (idAluno) => {
   } else return result[0];
 };
 
+
+const loginAluno = async (gra, ano) => {
+  const sql = "SELECT * FROM alunos WHERE gra = ? AND nascimento = ?";
+  result = await connection.query(sql,[gra, ano])
+  if(result[0].length < 1){
+    return "Credenciais Incorretas."
+  }
+
+const mapaUsuario = {
+   "idaluno": result[0][0]["idalunos"],
+   "nome": result[0][0]["nome"]
+}
+    return mapaUsuario
+};
+
 module.exports = {
   adicionarPresenca,
   consultarPresencas,
   verPresencaJaMarcada,
   verTodasDisciplinas,
-  consultarAulasAbertas
+  consultarAulasAbertas,
+  loginAluno
 };

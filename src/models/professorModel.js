@@ -19,6 +19,16 @@ const consultarPresencas = async (idProfessor) => {
     return result;
   }
 };
+
+const consultarAlunosPresentes = async (idAula) => {
+  if (idAula != null) {
+    const [result] = await connection.execute(
+      `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas =  ${idAula}`
+    );
+    return result;
+  }
+};
+
 const consultarAlunosDisciplina = async (idMateria) => {
   if (idMateria != null) {
     const [result] = await connection.execute(
@@ -27,6 +37,10 @@ const consultarAlunosDisciplina = async (idMateria) => {
     return result;
   }
 };
+
+
+
+
 const adicionarFaltas = async (carga, id, materia) => {
   const [result] = await connection.execute(
     "UPDATE presencas SET faltas = faltas + ? WHERE presencas.alunos_idalunos = ? AND presencas.materia_idmateria = ?",
@@ -104,4 +118,5 @@ module.exports = {
   addAula,
   consultarAulaDisciplina,
   adicionarNaMateria,
+  consultarAlunosPresentes
 };

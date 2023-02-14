@@ -15,6 +15,11 @@ const alunosUmaDisciplina = async (req, res) => {
   const alunos = await professorModel.consultarAlunosDisciplina(idMateria);
   return res.status(200).json(alunos);
 };
+const consultarAlunosPresentes = async (req, res) => {
+  const idAula = req.body.idAula;
+  const alunos = await professorModel.consultarAlunosPresentes(idAula);
+  return res.status(200).json(alunos);
+};
 
 const adicionarFaltas = async (req, res) => {
   const id = req.body.id;
@@ -70,4 +75,5 @@ module.exports = {
   addAula,
   consultarAulaDisciplina,
   adicionarNaMateria,
+  consultarAlunosPresentes
 };
