@@ -59,13 +59,27 @@ const deletarProfessor = async (idProf) => {
     }
   };
 
+  
+  const verCursosPolo = async (idPolo) => {
+    if (idPolo != null) {
+       const [result] = await connection.execute(
+        `SELECT *
+        FROM cursos
+        WHERE idpolo = ?;`,[idPolo]);
+      return result;
+    }else{
+        return "Alguns dados estão vazios"
+    }
+  };
+
 module.exports = {
     criarProfessor,
     deletarProfessor,
     criarPolo,
     deletarPolo,
     editarPolo,
-    verPolos
+    verPolos,
+    verCursosPolo
 };
 
 // `INSERT INTO professores (nome, usuario, senha) VALUES (${nome},${usuario},${senha})`);

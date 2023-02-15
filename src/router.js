@@ -65,11 +65,15 @@ router.post("/aluno/presenca", alunoController.adicionarPresenca);
 
 router.post("/aluno/presencaMarcada", alunoController.verPresencaMarcada);
 
-
+router.post("/coordenador/alunos/curso", coordenadorController.verAlunos);
+router.post("/coordenador/aluno/faltas", coordenadorController.verFaltas);
 router.post("/coordenador/alunos/", coordenadorController.criarAluno);
+router.put("/coordenador/alunos/", coordenadorController.editarAluno);
+router.delete("/coordenador/alunos/", coordenadorController.deletarAluno);
 
 router.post("/administrador/professores/", administradorController.criarProfessor);
 router.delete("/administrador/professores/", administradorController.deletarProfessor);
+router.post("/administrador/polo/", administradorController.verCursosPolo);
 router.get("/administrador/polos/", administradorController.verPolos);
 router.post("/administrador/polos/", administradorController.criarPolo);
 router.delete("/administrador/polos/", administradorController.deletarPolo);
