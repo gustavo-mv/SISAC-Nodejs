@@ -54,15 +54,21 @@ const verTodasDisciplinas = async (idAluno) => {
 
 
 const loginAluno = async (gra, ano) => {
-  const sql = "SELECT * FROM alunos WHERE gra = ? AND nascimento = ?";
+  const sql = "SELECT alunos.idalunos, alunos.nome, cursos.nome AS curso FROM alunos INNER JOIN cursos ON alunos.idcurso = cursos.idcurso WHERE gra = ? AND nascimento = ?";
   result = await connection.query(sql,[gra, ano])
   if(result[0].length < 1){
-    return "Credenciais Incorretas."
+    const erro = {
+      "status": false,
+      "resultado": "Credenciais inválidas."
+    }
+     return erro;
   }
 
 const mapaUsuario = {
+   "status": true,
    "idaluno": result[0][0]["idalunos"],
-   "nome": result[0][0]["nome"]
+   "nome": result[0][0]["nome"],
+   "curso": result[0][0]["curso"]
 }
     return mapaUsuario
 };

@@ -8,9 +8,16 @@ const criarProfessor = async (nome,usuario,senha) => {
     const hash = await bcrypt.hash(senha,10);
     await connection.execute(`INSERT INTO professores (nome, usuario, senha) VALUES ( ?,?,?)`,[nome,usuario,hash])
     return "Cadastrado com sucesso."
-}
+}};
 
-};
+const criarCoordenador = async (nome,usuario,senha,polo) => {
+  if (nome == null || usuario == null || senha == null || polo == null) {
+  return "O alguma informação não está presente."
+}else{
+  const hash = await bcrypt.hash(senha,10);
+  await connection.execute(`INSERT INTO coordenadores (nome, usuario, senha, idpolo) VALUES ( ?,?,?,?)`,[nome,usuario,hash,polo])
+  return "Cadastrado com sucesso."
+}}
 
 const verPolos = async () => {
     const [result] =  await connection.execute(
@@ -79,7 +86,8 @@ module.exports = {
     deletarPolo,
     editarPolo,
     verPolos,
-    verCursosPolo
+    verCursosPolo,
+    criarCoordenador
 };
 
 // `INSERT INTO professores (nome, usuario, senha) VALUES (${nome},${usuario},${senha})`);

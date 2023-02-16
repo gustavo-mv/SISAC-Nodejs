@@ -9,10 +9,15 @@ const loginProfessor = async (req, res) => {
 };
 
 const loginAluno = async (req, res) => {
-  const usuario = req.body.gra;
+  const gra = req.body.gra;
   const ano = req.body.ano;
-  const confirmarDados = await alunoModel.loginAluno(usuario, ano);
-  return res.status(200).json(confirmarDados);
+  const confirmarDados = await alunoModel.loginAluno(gra, ano);
+  if(confirmarDados["status"] == false){
+    return res.status(401).json(confirmarDados);
+  } else {
+    return res.status(200).json(confirmarDados);
+  }
+
 };
 
 module.exports = {

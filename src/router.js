@@ -70,7 +70,7 @@ router.post("/coordenador/aluno/faltas", coordenadorController.verFaltas);
 router.post("/coordenador/alunos/", coordenadorController.criarAluno);
 router.put("/coordenador/alunos/", coordenadorController.editarAluno);
 router.delete("/coordenador/alunos/", coordenadorController.deletarAluno);
-
+router.post("/administrador/coordenadores/", administradorController.criarCoordenador);
 router.post("/administrador/professores/", administradorController.criarProfessor);
 router.delete("/administrador/professores/", administradorController.deletarProfessor);
 router.post("/administrador/polo/", administradorController.verCursosPolo);

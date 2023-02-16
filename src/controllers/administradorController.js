@@ -8,6 +8,15 @@ const criarProfessor = async (req, res) => {
     return res.status(200).json(resultado);
   };
 
+  const criarCoordenador = async (req, res) => {
+    const nome = req.body.nome;
+    const usuario = req.body.usuario;
+    const senha = req.body.senha;
+    const polo = req.body.polo;
+    const resultado = await administradorModel.criarCoordenador(nome,usuario,senha,polo);
+    return res.status(200).json(resultado);
+  };
+
   const deletarProfessor = async (req, res) => {
     const idProf = req.body.idProf;
     const resultado = await administradorModel.deletarProfessor(idProf);
@@ -53,5 +62,6 @@ module.exports = {
     deletarPolo,
     editarPolo,
     verPolos,
-    verCursosPolo
+    verCursosPolo,
+    criarCoordenador
 };
