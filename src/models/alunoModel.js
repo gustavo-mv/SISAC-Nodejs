@@ -1,6 +1,7 @@
 const { json } = require("express");
 const connection = require("./connection");
 
+
 const adicionarPresenca = async (idAluno, idAula) => {
   const [result] = await connection.execute(
     "INSERT INTO `alunospresentes`(`aulas_idAulas`,`idalunos`) VALUES (?,?)",
@@ -54,7 +55,7 @@ const verTodasDisciplinas = async (idAluno) => {
 
 
 const loginAluno = async (gra, ano) => {
-  const sql = "SELECT alunos.idalunos, alunos.nome, cursos.nome AS curso FROM alunos INNER JOIN cursos ON alunos.idcurso = cursos.idcurso WHERE gra = ? AND nascimento = ?";
+  const sql = "SELECT alunos.idalunos, alunos.gra, alunos.nome, cursos.nome AS curso FROM alunos INNER JOIN cursos ON alunos.idcurso = cursos.idcurso WHERE gra = ? AND nascimento = ?";
   result = await connection.query(sql,[gra, ano])
   if(result[0].length < 1){
     const erro = {
@@ -68,6 +69,7 @@ const mapaUsuario = {
    "status": true,
    "idaluno": result[0][0]["idalunos"],
    "nome": result[0][0]["nome"],
+   "gra": result[0][0]["gra"],
    "curso": result[0][0]["curso"]
 }
     return mapaUsuario
