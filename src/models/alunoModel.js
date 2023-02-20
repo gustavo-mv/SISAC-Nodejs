@@ -45,7 +45,7 @@ const verPresencaJaMarcada = async (idAluno, idAula) => {
 
 const verTodasDisciplinas = async (idAluno) => {
   const result =
-    await connection.execute(`SELECT materia.nome as Disciplina, presencas.faltas as Faltas
+    await connection.execute(`SELECT materia.idmateria as Id, materia.nome as Disciplina, presencas.faltas as Faltas
   FROM materia INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria WHERE presencas.alunos_idalunos = ${idAluno}`);
 
   if (Object.keys(result[0]).length === 0) {
@@ -75,11 +75,19 @@ const mapaUsuario = {
     return mapaUsuario
 };
 
+
+const consultarPresencasEmUmaDisciplina = async (idAluno, idMateria) => {
+  const sql = `SELECT materia.nome as Disciplina, aulas.data as Dia, IF (alunospresentes.idalunos = alunos.idalunos, "Presente", "Faltou") as Estado FROM aulas CROSS JOIN alunos INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria LEFT OUTER JOIN alunospresentes ON alunospresentes.aulas_idAulas = aulas.idAulas AND alunospresentes.idalunos = alunos.idalunos WHERE alunos.idalunos = ? AND materia.idmateria = ? ORDER BY materia.nome, aulas.data, alunos.nome`;
+  result = await connection.query(sql,[idAluno, idMateria])
+  return result[0];
+};
+
 module.exports = {
   adicionarPresenca,
   consultarPresencas,
   verPresencaJaMarcada,
   verTodasDisciplinas,
   consultarAulasAbertas,
-  loginAluno
+  loginAluno,
+  consultarPresencasEmUmaDisciplina
 };

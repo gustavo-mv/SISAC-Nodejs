@@ -37,6 +37,11 @@ router.post(
   alunoController.consultarAulasAbertas
 );
 
+router.post(
+  "/aluno/:idAluno?/consultarPresencas/",
+  alunoController.consultarPresencasEmUmaDisciplina
+);
+
 router.get("/aluno/:idAluno?/", alunoController.verTodasDisciplinas);
 
 router.get("/aluno/:idAluno?/presenca", alunoController.consultarPresencas);
