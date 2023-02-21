@@ -28,6 +28,7 @@ const consultarAulasAbertas = async (idAluno) => {
     aulas.idaulas, alunos.idalunos FROM aulas INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria 
     INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos
     WHERE NOT aulas.finalizada AND alunos.idalunos = ${idAluno}`);
+
     return result[0];
   } else {
     return "O id é inválido.";
@@ -65,22 +66,47 @@ const loginAluno = async (gra, ano) => {
      return erro;
   }
 
-const mapaUsuario = {
-   "status": true,
-   "idaluno": result[0][0]["idalunos"],
-   "nome": result[0][0]["nome"],
-   "gra": result[0][0]["gra"],
-   "curso": result[0][0]["curso"]
+  const mapaUsuario = {
+    "status": true,
+    "idaluno": result[0][0]["idalunos"],
+    "nome": result[0][0]["nome"],
+    "gra": result[0][0]["gra"],
+    "curso": result[0][0]["curso"]
 }
     return mapaUsuario
 };
 
 
-const consultarPresencasEmUmaDisciplina = async (idAluno, idMateria) => {
-  const sql = `SELECT materia.nome as Disciplina, aulas.data as Dia, IF (alunospresentes.idalunos = alunos.idalunos, "Presente", "Faltou") as Estado FROM aulas CROSS JOIN alunos INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria LEFT OUTER JOIN alunospresentes ON alunospresentes.aulas_idAulas = aulas.idAulas AND alunospresentes.idalunos = alunos.idalunos WHERE alunos.idalunos = ? AND materia.idmateria = ? ORDER BY materia.nome, aulas.data, alunos.nome`;
-  result = await connection.query(sql,[idAluno, idMateria])
-  return result[0];
-};
+  const consultarPresencasEmUmaDisciplina = async (idAluno, idMateria) => {
+  const sql = `SELECT materia.nome as Disciplina, aulas.data as Dia, aulas.carga as Carga,
+  IF (alunospresentes.idalunos = alunos.idalunos, "Presente", "Faltou") as Estado 
+  FROM aulas CROSS JOIN alunos INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria 
+  LEFT OUTER JOIN alunospresentes ON alunospresentes.aulas_idAulas = aulas.idAulas 
+  AND alunospresentes.idalunos = alunos.idalunos WHERE alunos.idalunos = ? AND materia.idmateria = ? 
+  ORDER BY materia.nome, aulas.data, alunos.nome`;
+
+  const result = await connection.query(sql,[idAluno, idMateria])
+  let presencas = 0;
+  let faltas = 0;
+  for(let i = 0; i < result[0].length; i++){
+    if(result[0][i].Estado == "Faltou"){
+    faltas += result[0][i]["Carga"];
+  }else{
+    presencas += result[0][i]["Carga"]
+  }
+ }
+ totalCarga = faltas + presencas;
+ faltas = (faltas/totalCarga) * 100;
+ presencas = (presencas/totalCarga) * 100;
+ 
+ const corpoFaltas = {
+  "Presencas": `${presencas.toFixed(1)}%`,
+  "Faltas": `${faltas.toFixed(1)}%`,
+  "Aulas": result[0]
+ }
+ return corpoFaltas;
+}
+
 
 module.exports = {
   adicionarPresenca,

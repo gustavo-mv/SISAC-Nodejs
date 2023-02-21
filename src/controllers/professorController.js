@@ -65,6 +65,7 @@ const adicionarNaMateria = async (req, res) => {
   return res.status(201).json(result);
 };
 
+
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
@@ -75,5 +76,5 @@ module.exports = {
   addAula,
   consultarAulaDisciplina,
   adicionarNaMateria,
-  consultarAlunosPresentes
+  consultarAlunosPresentes,
 };

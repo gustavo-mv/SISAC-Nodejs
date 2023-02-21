@@ -42,6 +42,8 @@ router.post(
   alunoController.consultarPresencasEmUmaDisciplina
 );
 
+
+
 router.get("/aluno/:idAluno?/", alunoController.verTodasDisciplinas);
 
 router.get("/aluno/:idAluno?/presenca", alunoController.consultarPresencas);
@@ -52,7 +54,7 @@ router.post(
 );
 router.post(
   "/professor/:idProf?/alunosPresentes/",
-  professorController.consultarAlunosPresentes
+  professorController.consultarAlunosPresentes,
 );
 
 router.post(
