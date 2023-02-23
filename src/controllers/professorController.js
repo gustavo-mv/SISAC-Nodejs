@@ -34,14 +34,40 @@ const verTodosAlunos = async (req, res) => {
   return res.status(201).json(result);
 };
 
+const criarAula = async (req,res) =>{
+   function gerarToken(length) {
+      const caracteres ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let token = '';
+      const caracteresLength = caracteres.length;
+        for ( let i = 0; i < length; i++ ) {
+        token += caracteres.charAt(Math.floor(Math.random() * caracteresLength));
+      }
+      return token;
+  }
+  const token = gerarToken(15);
+  const carga = req.body.cargaHoraria;
+  const idMateria = req.body.idMateria;
+  const validaQR = req.body.validaQR;
+  await professorModel.inserirAula(token,carga,idMateria,validaQR)
+  if(carga == null || idMateria == null){
+    return "Alguma informação está inválida."
+  }
+  if(validaQR == 1){
+    return res.status(201).json(token)
+  }
+  else{
+    return res.status(201).json("Aula criada com sucesso! QR não foi criado.")
+  }
+}
+
 const fecharAula = async (req, res) => {
   const idAula = req.body.idAula;
-  if (idAula) {
-    const result = await professorModel.fecharAula(idAula);
-    return res.status(201).json(result);
-  } else {
-    return "O id dessa aula não é válido.";
-  }
+    if (idAula) {
+       const result = await professorModel.fecharAula(idAula);
+       return res.status(201).json(result);
+    } else {
+       return "O id dessa aula não é válido.";
+    }
 };
 
 const consultarAulaDisciplina = async (req, res) => {
@@ -65,7 +91,6 @@ const adicionarNaMateria = async (req, res) => {
   return res.status(201).json(result);
 };
 
-
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
@@ -77,4 +102,5 @@ module.exports = {
   consultarAulaDisciplina,
   adicionarNaMateria,
   consultarAlunosPresentes,
+  criarAula
 };

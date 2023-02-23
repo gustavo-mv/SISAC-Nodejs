@@ -44,6 +44,7 @@ router.post(
 
 
 
+
 router.get("/aluno/:idAluno?/", alunoController.verTodasDisciplinas);
 
 router.get("/aluno/:idAluno?/presenca", alunoController.consultarPresencas);
@@ -52,6 +53,12 @@ router.post(
   "/professor/:idProf?/consultarAula/",
   professorController.consultarAulaDisciplina
 );
+
+router.post(
+  "/professor/:idProf?/criarAula",
+  professorController.criarAula
+);
+
 router.post(
   "/professor/:idProf?/alunosPresentes/",
   professorController.consultarAlunosPresentes,

@@ -24,11 +24,17 @@ const consultarPresencas = async (idAluno) => {
 const consultarAulasAbertas = async (idAluno) => {
   if (idAluno) {
     const result = await connection.execute(
-    `SELECT materia.nome as Disciplina, aulas.data AS Dia, 
-    aulas.idaulas, alunos.idalunos FROM aulas INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria 
-    INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos
-    WHERE NOT aulas.finalizada AND alunos.idalunos = ${idAluno}`);
-
+     `SELECT materia.nome as Disciplina, aulas.data AS Dia, aulas.validacao_qrcode AS Validacao ,aulas.idaulas, professores.nome AS Professor, aulas.carga AS Carga
+     FROM aulas 
+     INNER JOIN materia 
+     ON aulas.materia_idmateria = materia.idmateria 
+     INNER JOIN presencas 
+     ON presencas.materia_idmateria = materia.idmateria 
+     INNER JOIN alunos
+     ON presencas.alunos_idalunos = alunos.idalunos
+     INNER JOIN professores
+     ON professores.idprofessor = materia.professores_idprofessor
+     WHERE NOT aulas.finalizada AND alunos.idalunos = ${idAluno}`);
     return result[0];
   } else {
     return "O id é inválido.";
@@ -84,7 +90,6 @@ const loginAluno = async (gra, ano) => {
   LEFT OUTER JOIN alunospresentes ON alunospresentes.aulas_idAulas = aulas.idAulas 
   AND alunospresentes.idalunos = alunos.idalunos WHERE alunos.idalunos = ? AND materia.idmateria = ? 
   ORDER BY materia.nome, aulas.data, alunos.nome`;
-
   const result = await connection.query(sql,[idAluno, idMateria])
   let presencas = 0;
   let faltas = 0;
@@ -100,12 +105,13 @@ const loginAluno = async (gra, ano) => {
  presencas = (presencas/totalCarga) * 100;
  
  const corpoFaltas = {
-  "Presencas": `${presencas.toFixed(1)}%`,
-  "Faltas": `${faltas.toFixed(1)}%`,
+  "Presencas": `${presencas.toFixed(1)}`,
+  "Faltas": `${faltas.toFixed(1)}`,
   "Aulas": result[0]
  }
  return corpoFaltas;
 }
+
 
 
 module.exports = {
@@ -115,5 +121,5 @@ module.exports = {
   verTodasDisciplinas,
   consultarAulasAbertas,
   loginAluno,
-  consultarPresencasEmUmaDisciplina
+  consultarPresencasEmUmaDisciplina,
 };

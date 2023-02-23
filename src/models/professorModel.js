@@ -110,6 +110,15 @@ const loginProfessor = async (usuario, senha) => {
     }
 
 };
+const inserirAula = async (token,carga,idMateria,validaQR) => {
+  if(validaQR == 1){
+  let sql = "INSERT INTO `aulas`(`data`,`carga`, `materia_idmateria`,`validacao_qrcode`, `token`) VALUES (NOW(),?,?,?,?)"
+  await connection.query(sql,[carga,idMateria,validaQR,token]);
+  }else{
+    let sql = "INSERT INTO `aulas`(`data`,`carga`, `materia_idmateria`) VALUES (NOW(),?,?)"
+   await connection.query(sql,[carga,idMateria]);
+  }
+}
 
 module.exports = {
   pegarDisciplinas,
@@ -122,6 +131,7 @@ module.exports = {
   addAula,
   consultarAulaDisciplina,
   adicionarNaMateria,
-  consultarAlunosPresentes
+  consultarAlunosPresentes,
+  inserirAula
 };
 //     const validarSenha = await bcrypt.compare(senha,)
