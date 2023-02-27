@@ -120,6 +120,16 @@ const inserirAula = async (token,carga,idMateria,validaQR) => {
   }
 }
 
+const inserirHorario = async (corpoHorario) => {
+  if(corpoHorario.length < 4){
+    return "Alguma das informações está nula."
+  }else{
+    let sql = "INSERT INTO `horarios`( `hora_inicio`, `hora_fim`, `idmateria`, `dia`) VALUES (?)"
+    await connection.query(sql,[corpoHorario]);
+    return "Horário Criado com Sucesso!"
+  }
+}
+
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,
@@ -132,6 +142,6 @@ module.exports = {
   consultarAulaDisciplina,
   adicionarNaMateria,
   consultarAlunosPresentes,
-  inserirAula
+  inserirAula,
+  inserirHorario
 };
-//     const validarSenha = await bcrypt.compare(senha,)

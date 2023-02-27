@@ -91,6 +91,17 @@ const adicionarNaMateria = async (req, res) => {
   return res.status(201).json(result);
 };
 
+const inserirHorario = async (req, res) => {
+  const corpoHorario = [
+   req.body.horaInicio,
+   req.body.horaFim,
+   req.body.diaSemana,
+   req.body.idMateria
+  ]
+  const result = await professorModel.inserirHorario(corpoHorario.filter(e => e));
+  return res.status(201).json(result);
+};
+
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
@@ -102,5 +113,6 @@ module.exports = {
   consultarAulaDisciplina,
   adicionarNaMateria,
   consultarAlunosPresentes,
-  criarAula
+  criarAula,
+  inserirHorario
 };
