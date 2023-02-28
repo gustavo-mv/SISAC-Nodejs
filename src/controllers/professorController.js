@@ -102,6 +102,13 @@ const inserirHorario = async (req, res) => {
   return res.status(201).json(result);
 };
 
+
+const deletarHorarios = async (req, res) => {
+  const idMateria = req.body.idMateria;
+  const result = await professorModel.adicionarNaMateria(idMateria);
+  return res.status(200).json(result);
+};
+
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
@@ -114,5 +121,6 @@ module.exports = {
   adicionarNaMateria,
   consultarAlunosPresentes,
   criarAula,
-  inserirHorario
+  inserirHorario,
+  deletarHorarios
 };

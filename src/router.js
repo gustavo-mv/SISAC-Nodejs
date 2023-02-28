@@ -75,9 +75,10 @@ router.post(
 );
 
 router.post(
-  "/professor/:idProf?/inserirHorario/",
+  "/professor/:idProf?/horario/",
   professorController.inserirHorario
 );
+router.delete("/professor/:idProf?/horario/", coordenadorController.deletarHorarios);
 
 router.post("/professor/:idProf?/adicionarAula/", professorController.addAula);
 

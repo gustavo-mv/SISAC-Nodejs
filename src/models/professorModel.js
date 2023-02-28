@@ -130,6 +130,16 @@ const inserirHorario = async (corpoHorario) => {
   }
 }
 
+const deletarHorarios = async (idMateria) => {
+  if(idMateria != undefined){
+    return "Alguma das informações está nula."
+  }else{
+    let sql = `DELETE FROM horarios WHERE idmateria = ${idMateria}`
+    await connection.query(sql);
+    return "Todos os horários foram deletados"
+  }
+}
+
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,
@@ -143,5 +153,6 @@ module.exports = {
   adicionarNaMateria,
   consultarAlunosPresentes,
   inserirAula,
-  inserirHorario
+  inserirHorario,
+  deletarHorarios,
 };
