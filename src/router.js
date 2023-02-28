@@ -20,6 +20,11 @@ router.get(
   professorController.todasAsDisciplinas
 );
 
+router.get(
+  "/aluno/:idAluno?/horarios/:idMateria?/",
+ alunoController.horariosMateria
+);
+
 router.get("/professor/:idProf?/alunos", professorController.verTodosAlunos);
 
 router.get(
@@ -78,7 +83,7 @@ router.post(
   "/professor/:idProf?/horario/",
   professorController.inserirHorario
 );
-router.delete("/professor/:idProf?/horario/", coordenadorController.deletarHorarios);
+router.delete("/professor/:idProf?/horario/", professorController.deletarHorarios);
 
 router.post("/professor/:idProf?/adicionarAula/", professorController.addAula);
 

@@ -34,6 +34,7 @@ const verPresencaMarcada = async (req, res) => {
       .status(500)
       .json("O id está inexistente ou não é um tipo aceitável");
 };
+
 const verTodasDisciplinas = async (req, res) => {
   const idAluno = req.params.idAluno;
   if (idAluno != null) {
@@ -57,6 +58,16 @@ const consultarPresencasEmUmaDisciplina = async (req, res) => {
       .json("O id está inexistente ou não é um tipo aceitável");
 };
 
+const horariosMateria = async (req, res) => {
+  const idMateria = req.params.idMateria;
+  if (idMateria != undefined) {
+    const result = await alunoModel.horariosMateria(idMateria);
+    return res.status(200).json(result);
+  } else
+    return res
+      .status(500)
+      .json("O id está inexistente ou não é um tipo aceitável");
+};
 
 
 module.exports = {
@@ -65,5 +76,6 @@ module.exports = {
   verPresencaMarcada,
   verTodasDisciplinas,
   consultarAulasAbertas,
-  consultarPresencasEmUmaDisciplina
+  consultarPresencasEmUmaDisciplina,
+  horariosMateria
 };

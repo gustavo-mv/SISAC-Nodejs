@@ -105,7 +105,7 @@ const inserirHorario = async (req, res) => {
 
 const deletarHorarios = async (req, res) => {
   const idMateria = req.body.idMateria;
-  const result = await professorModel.adicionarNaMateria(idMateria);
+  const result = await professorModel.deletarHorarios(idMateria);
   return res.status(200).json(result);
 };
 

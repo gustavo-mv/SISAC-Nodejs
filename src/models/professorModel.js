@@ -131,12 +131,12 @@ const inserirHorario = async (corpoHorario) => {
 }
 
 const deletarHorarios = async (idMateria) => {
-  if(idMateria != undefined){
-    return "Alguma das informações está nula."
+  if(idMateria == undefined){
+    return "Alguma informação está nula."
   }else{
-    let sql = `DELETE FROM horarios WHERE idmateria = ${idMateria}`
+    let sql = "DELETE FROM horarios WHERE idmateria = `idMateria`"
     await connection.query(sql);
-    return "Todos os horários foram deletados"
+    return "Todos os horários com esse ID foram deletados"
   }
 }
 

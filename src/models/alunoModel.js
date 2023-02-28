@@ -113,6 +113,15 @@ const loginAluno = async (gra, ano) => {
 }
 
 
+const horariosMateria = async (idMateria) => {
+  const result = await connection.execute
+  ("SELECT `hora_inicio`, `hora_fim`, `dia` FROM `horarios` WHERE idmateria = " + idMateria);
+   if(result[0].length < 1){
+    return "Não há horários nesse ID"
+   }else{
+    return result[0];
+   }
+};
 
 module.exports = {
   adicionarPresenca,
@@ -122,4 +131,5 @@ module.exports = {
   consultarAulasAbertas,
   loginAluno,
   consultarPresencasEmUmaDisciplina,
+  horariosMateria
 };
