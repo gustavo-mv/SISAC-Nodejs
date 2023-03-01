@@ -12,35 +12,37 @@ app.listen(PORT,() =>
   console.log(`O servidor está sendo executado em ${PORT}`)
 );
 
-cron.schedule('*/5 * * * * 1-5', async () => {
 
+const aulasAbertas = [];
+cron.schedule('*/5 * * * * *', async () => {
 const data = new Date;
 const diaSemana = data.getDay();
-const h = data.getHours();
-const m = data.getMinutes();
-const horarioAtual = h + ":" + m;
-const horarioAtualInteiro = parseInt(h.toString() + m.toString());
+
+const horarioAtualCompleto = data.toLocaleTimeString("pt-BR", {
+  timeStyle: "medium",      
+  hour12: false,            
+  numberingSystem: "latn"   
+});
+
 const sqlBuscar = "SELECT * FROM `horarios` WHERE `dia` = ? && `hora_inicio` <= ? && `hora_fim` >= ?" 
-const aulasAtuais = await connection.execute(sqlBuscar,[diaSemana,horarioAtual,horarioAtual]);
-const aulasAbertas = [];
-function converteInt(str){
-  let resultado = (str.split(0,0)).toString()
- // const retorno = parseInt(resultado);
-  return resultado;
-}
-console.log(converteInt("19:00"));
- for(let i = 0; i < aulasAtuais[0].length; i++){
-  if(aulasAtuais[0][i].atual == "0"){
+const aulasAtuais = await connection.execute(sqlBuscar,[diaSemana,horarioAtualCompleto,horarioAtualCompleto]);
+for(let i = 0; i < aulasAtuais[0].length; i++){
+if(aulasAtuais[0][i].atual == "0"){
   console.log(aulasAtuais[0][i]);
   const idHorario = aulasAtuais[0][i].idhorario;
   const sql = "UPDATE `horarios` SET `atual` = 1 WHERE idhorario = ?" 
   await connection.execute(sql,[idHorario]);
+  aulasAtuais[0][i].atual = "1";
   aulasAbertas.push(aulasAtuais[0][i]);
-  for(let i = 0; i < aulasAbertas[0].length; i++){
-  if(aulasAtuais[0][i].hora_fim > horarioAtual.toString()){
-    return "Olá"
-  }
-
-  }}  
-
-}})
+  }}
+  
+for(let i = 0; i < aulasAbertas.length; i++){
+  const horaReal = (horarioAtualCompleto);
+  const horaArray = (aulasAbertas[i].hora_fim);
+  const idHorarioLista = (aulasAbertas[i].idhorario)
+if(horaArray < horaReal){
+   const sqlFechar = "UPDATE `horarios` SET `atual` = 0 WHERE idhorario = ?" 
+   await connection.execute(sqlFechar,[idHorarioLista])
+   aulasAbertas.splice(aulasAbertas[i],1)
+   }}
+})
