@@ -21,11 +21,14 @@ router.get(
 );
 
 router.get(
-  "/aluno/:idAluno?/horarios/:idMateria?/",
- alunoController.horariosMateria
+  "/aluno/:idAluno?/horarios/",
+ alunoController.verHorarios
 );
 
 router.get("/professor/:idProf?/alunos", professorController.verTodosAlunos);
+
+router.get("/aluno/:idAluno?/horarios", alunoController.verHorarios);
+
 
 router.get(
   "/professor/:idProf?/presencas",

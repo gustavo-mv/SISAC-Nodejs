@@ -123,6 +123,21 @@ const horariosMateria = async (idMateria) => {
    }
 };
 
+
+const verHorarios = async (idAluno) => {
+  const corpoDiasHorarios = [[],[],[],[],[],[]]
+  const sql = (
+    "SELECT materia.nome AS Disciplina, horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia FROM horarios INNER JOIN materia ON materia.idmateria = horarios.idmateria INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos WHERE alunos.idalunos = ? GROUP BY materia.nome, horarios.hora_inicio, horarios.hora_fim, horarios.dia ORDER BY horarios.dia ");
+  const result = await connection.execute(sql,[idAluno])
+   if(result[0].length < 1){
+    return "Não há horários nesse ID"
+   }else{
+    for(let i = 0; i < result[0].length; i++){
+    if(result[0][i].Dia = corpoDiasHorarios.indexOf(i)){
+    corpoDiasHorarios.push(result[0][i]);
+    }
+  return corpoDiasHorarios;
+}}}
 module.exports = {
   adicionarPresenca,
   consultarPresencas,
@@ -131,5 +146,6 @@ module.exports = {
   consultarAulasAbertas,
   loginAluno,
   consultarPresencasEmUmaDisciplina,
-  horariosMateria
+  horariosMateria,
+  verHorarios
 };
