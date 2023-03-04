@@ -1,6 +1,6 @@
 const app = require("./app");
 require("dotenv").config();
-const jwt = require("jsonwebtoken");
+
 const cron = require("node-cron");
 const connection = require("./models/connection");
 const servidorController = require("./controllers/servidorController");
@@ -11,6 +11,10 @@ const PORT = process.env.PORT || 3333;
 app.listen(PORT,() =>
   console.log(`O servidor está sendo executado em ${PORT}`)
 );
+
+setTimeout(async function(){
+  await connection.execute("UPDATE `horarios` SET `atual` = 0 WHERE `atual` = 1 ")
+}, 1000) 
 
 
 const aulasAbertas = [];

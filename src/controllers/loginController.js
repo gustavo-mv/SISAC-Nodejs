@@ -1,6 +1,7 @@
 const professorModel = require("../models/professorModel");
 const alunoModel = require("../models/alunoModel");
 
+
 const loginProfessor = async (req, res) => {
   const usuario = req.body.usuario;
   const senha = req.body.senha;

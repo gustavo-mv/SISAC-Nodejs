@@ -3,12 +3,24 @@ const connection = require("./connection");
 
 
 const adicionarPresenca = async (idAluno, idAula) => {
-  const [result] = await connection.execute(
+     await connection.execute(
     "INSERT INTO `alunospresentes`(`aulas_idAulas`,`idalunos`) VALUES (?,?)",
     [idAula, idAluno]
   );
-  return "Presença adicionada com sucesso!";
+  return "ok";
 };
+
+
+const adicionarPresencaQR = async (idAluno, idAula, token) => {
+const result = await connection.execute("SELECT IF(token = ?, true, false) AS resultado FROM aulas WHERE aulas.idAulas = ?",[token, idAula]);
+if(result[0][0].resultado == 1){
+  await connection.execute("INSERT INTO `alunospresentes`(`aulas_idAulas`,`idalunos`) VALUES (?,?)",[idAula, idAluno])
+    return "ok";
+}else{
+  return "qrcodeinvalido"
+}
+};
+
 
 const consultarPresencas = async (idAluno) => {
   if (idAluno) {
@@ -24,17 +36,14 @@ const consultarPresencas = async (idAluno) => {
 const consultarAulasAbertas = async (idAluno) => {
   if (idAluno) {
     const result = await connection.execute(
-     `SELECT materia.nome as Disciplina, aulas.data AS Dia, aulas.validacao_qrcode AS Validacao ,aulas.idaulas, professores.nome AS Professor, aulas.carga AS Carga
+     `SELECT materia.nome as Disciplina, aulas.data AS Dia, aulas.validacao_qrcode AS Validacao, aulas.idaulas, professores.nome AS Professor, aulas.carga AS Carga
      FROM aulas 
-     INNER JOIN materia 
-     ON aulas.materia_idmateria = materia.idmateria 
-     INNER JOIN presencas 
-     ON presencas.materia_idmateria = materia.idmateria 
-     INNER JOIN alunos
-     ON presencas.alunos_idalunos = alunos.idalunos
-     INNER JOIN professores
-     ON professores.idprofessor = materia.professores_idprofessor
-     WHERE NOT aulas.finalizada AND alunos.idalunos = ${idAluno}`);
+     INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria 
+     INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria 
+     INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos
+     INNER JOIN professores ON professores.idprofessor = materia.professores_idprofessor
+     LEFT OUTER JOIN alunospresentes ON alunospresentes.aulas_idAulas = aulas.idAulas
+     WHERE (alunospresentes.aulas_idAulas IS NULL OR aulas.idAulas IS NULL) AND NOT aulas.finalizada AND alunos.idalunos = ${idAluno}`);
     return result[0];
   } else {
     return "O id é inválido.";
@@ -136,14 +145,13 @@ const objetoCorpo = {
   "Sábado": corpoDiasHorarios[6]
 }
   const sql = (
-    "SELECT materia.nome AS Disciplina, horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia FROM horarios INNER JOIN materia ON materia.idmateria = horarios.idmateria INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos WHERE alunos.idalunos = ? GROUP BY materia.nome, horarios.hora_inicio, horarios.hora_fim, horarios.dia ORDER BY horarios.dia ");
+  "SELECT materia.nome AS Disciplina, horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia FROM horarios INNER JOIN materia ON materia.idmateria = horarios.idmateria INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos WHERE alunos.idalunos = ? GROUP BY materia.nome, horarios.hora_inicio, horarios.hora_fim, horarios.dia ORDER BY horarios.dia ");
   const result = await connection.execute(sql,[idAluno])
    if(result[0].length < 1){
     return "Não há horários nesse ID"
    }else{
-
     for(let i = 0; i < result[0].length; i++){  
-    corpoDiasHorarios[result[0][i].Dia].push(result[0][i]);
+    corpoDiasHorarios[result[0][i].Dia].push({Disciplina: result[0][i].Disciplina, Início: result[0][i].Inicio, Fim: result[0][i].Fim});
   }
   return objetoCorpo;
 }}
@@ -156,5 +164,6 @@ module.exports = {
   loginAluno,
   consultarPresencasEmUmaDisciplina,
   horariosMateria,
-  verHorarios
+  verHorarios,
+  adicionarPresencaQR
 };

@@ -6,9 +6,32 @@ const coordenadorController = require("./controllers/coordenadorController");
 const administradorController = require("./controllers/administradorController");
 const loginController = require("./controllers/loginController");
 const app = require("./app");
+const jwt = require("jsonwebtoken");
+const JWTSecret = "spaiodjkfopasijdf"
 
 router.post("/professor/login/", loginController.loginProfessor);
 router.post("/aluno/login/", loginController.loginAluno);
+
+
+function auth(req,res,next){
+  const authToken = req.headers['authorization'];
+  if(authToken != undefined){
+  const bearer = authToken.split(' ');
+  const token = bearer[1];
+  jwt.verify(token,JWTSecret,(err,data)=> {
+    if(err){
+      res.status(401);
+      res.json({err: "Token Inválido!"});
+    }else{
+      res.locals.idProfMid = data.id;
+      next();
+    }
+  })
+  }else{
+    res.status(401);
+    res.json("Token Inválido")
+  }
+}
 
 
 router.get("/", (req, res) => {
@@ -16,9 +39,8 @@ router.get("/", (req, res) => {
 });
 
 router.get(
-  "/professor/:idProf?/disciplinas",
-  professorController.todasAsDisciplinas
-);
+  "/professor/disciplinas",auth,
+  professorController.todasAsDisciplinas);
 
 router.get(
   "/aluno/:idAluno?/horarios/",
@@ -31,7 +53,7 @@ router.get("/aluno/:idAluno?/horarios", alunoController.verHorarios);
 
 
 router.get(
-  "/professor/:idProf?/presencas",
+  "/professor/presencas",auth,
   professorController.todasAsPresencas
 );
 
@@ -95,6 +117,8 @@ router.post("/professor/:idProf?/fecharAula", professorController.fecharAula);
 router.post("/professor/:idProf?/faltas", professorController.adicionarFaltas);
 
 router.post("/aluno/presenca", alunoController.adicionarPresenca);
+
+router.post("/aluno/presencaQR", alunoController.adicionarPresencaQR);
 
 router.post("/aluno/presencaMarcada", alunoController.verPresencaMarcada);
 

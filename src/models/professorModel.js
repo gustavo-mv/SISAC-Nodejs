@@ -1,24 +1,26 @@
 const connection = require("./connection");
 const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken");
+const JWTSecret = "spaiodjkfopasijdf"
+
 
 const pegarDisciplinas = async (idProfessor) => {
-  if (idProfessor != null) {
     const [result] = await connection.execute(
-      `SELECT materia.idmateria, materia.nome as Disciplina, materia.periodo, professores.nome as professores FROM materia INNER JOIN professores ON professores_idprofessor = professores.idprofessor WHERE ${idProfessor} = professores_idprofessor`
+      `SELECT materia.idmateria, materia.nome 
+      as Disciplina, materia.periodo, professores.nome as professores 
+      FROM materia INNER JOIN professores ON professores_idprofessor = 
+      professores.idprofessor WHERE ${idProfessor} = professores_idprofessor`
     );
     return result;
-  } else {
-    return "Erro no ID do Professor";
-  }
 };
 
 const consultarPresencas = async (idProfessor) => {
-  if (idProfessor != null) {
     const [result] = await connection.execute(
-      `SELECT materia.nome as Disciplina, aulas.data as Dia, IF(aulas.finalizada, \"Finalizada\", \"Aberta\") AS Status FROM aulas INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria WHERE materia.professores_idprofessor = ${idProfessor}`
+      `SELECT materia.nome as Disciplina, aulas.data as Dia, 
+      IF(aulas.finalizada, \"Finalizada\", \"Aberta\") AS Status FROM aulas 
+      INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria WHERE materia.professores_idprofessor = ${idProfessor}`
     );
     return result;
-  }
 };
 
 const consultarAlunosPresentes = async (idAula) => {
@@ -81,7 +83,7 @@ const consultarAulaDisciplina = async (idMateria) => {
 
 const adicionarNaMateria = async (idAluno, idMateria) => {
   if (idAluno !== undefined && idMateria !== undefined) {
-    await connection.execute(
+    await connection.query(
       "INSERT INTO `presencas`(`alunos_idalunos`,`materia_idmateria`) VALUES (?,?)",
       [idAluno, idMateria]
     );
@@ -99,17 +101,18 @@ const loginProfessor = async (usuario, senha) => {
     }else{
       const validarSenha = await bcrypt.compare(senha,result[0][0]["senha"]);
       if(validarSenha) {
-        const mapaUsuario = {
-          "idprofessor": result[0][0]["idprofessor"],
-          "nome": result[0][0]["nome"]
-     }
-           return mapaUsuario
+      const token = jwt.sign({id: result[0][0].idprofessor , nome: result[0][0].nome },JWTSecret,{expiresIn:'6h'});
+           return {
+            id: result[0][0].idprofessor ,
+            nome: result[0][0].nome,
+            token: token
+           };
       }else{
         return "Credenciais Incorretas."
       }
     }
-
 };
+
 const inserirAula = async (token,carga,idMateria,validaQR) => {
   if(validaQR == 1){
   let sql = "INSERT INTO `aulas`(`data`,`carga`, `materia_idmateria`,`validacao_qrcode`, `token`) VALUES (NOW(),?,?,?,?)"

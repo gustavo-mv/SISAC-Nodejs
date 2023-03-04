@@ -6,6 +6,15 @@ const adicionarPresenca = async (req, res) => {
   const result = await alunoModel.adicionarPresenca(idAluno, idAula);
   return res.status(200).json(result);
 };
+
+const adicionarPresencaQR = async (req, res) => {
+  const idAluno = req.body.idAluno;
+  const idAula = req.body.idAula;
+  const token = req.body.token;
+  const result = await alunoModel.adicionarPresencaQR( idAluno, idAula, token);
+  return res.status(200).json(result);
+};
+
 const consultarPresencas = async (req, res) => {
   const idAluno = req.params.idAluno;
   if (idAluno != null) {
@@ -90,5 +99,6 @@ module.exports = {
   consultarAulasAbertas,
   consultarPresencasEmUmaDisciplina,
   horariosMateria,
-  verHorarios
+  verHorarios,
+  adicionarPresencaQR
 };
