@@ -5,7 +5,6 @@ const alunoController = require("./controllers/alunoController");
 const coordenadorController = require("./controllers/coordenadorController");
 const administradorController = require("./controllers/administradorController");
 const loginController = require("./controllers/loginController");
-const app = require("./app");
 const jwt = require("jsonwebtoken");
 const JWTSecret = "spaiodjkfopasijdf"
 
@@ -35,8 +34,10 @@ function auth(req,res,next){
 
 
 router.get("/", (req, res) => {
-  res.send("Olá mundo");
+  res.sendFile( __dirname + "/teste.html");
 });
+
+
 
 router.get(
   "/professor/disciplinas",auth,

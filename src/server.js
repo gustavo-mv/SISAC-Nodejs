@@ -1,6 +1,10 @@
-const app = require("./app");
+const express = require("express");
+const app = express();
+const router = require("./router");
+app.use(router);
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 require("dotenv").config();
-
 const cron = require("node-cron");
 const connection = require("./models/connection");
 const servidorController = require("./controllers/servidorController");
@@ -8,7 +12,21 @@ const servidorController = require("./controllers/servidorController");
 
 const PORT = process.env.PORT || 3333;
 
-app.listen(PORT,() =>
+io.on('connection', (socket) => {
+
+  socket.on('loginprof',async ()=>{
+    await connection.query("INSERT INTO `loginprof` (`codigoLogin`) VALUES (?)",[socket.id])
+    io.emit("valor",socket.id)
+  })
+
+
+  socket.on('disconnect',()=>{
+    connection.query("DELETE FROM `loginprof` WHERE `codigoLogin` = ?",[socket.id]);
+  })
+});
+
+
+http.listen(PORT,() =>
   console.log(`O servidor está sendo executado em ${PORT}`)
 );
 
