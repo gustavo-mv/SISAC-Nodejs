@@ -145,13 +145,13 @@ const objetoCorpo = {
   "Sábado": corpoDiasHorarios[6]
 }
   const sql = (
-  "SELECT materia.nome AS Disciplina, horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia FROM horarios INNER JOIN materia ON materia.idmateria = horarios.idmateria INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos WHERE alunos.idalunos = ? GROUP BY materia.nome, horarios.hora_inicio, horarios.hora_fim, horarios.dia ORDER BY horarios.dia ");
+  "SELECT materia.nome AS Disciplina, horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia, horarios.atual AS Atual FROM horarios INNER JOIN materia ON materia.idmateria = horarios.idmateria INNER JOIN presencas ON presencas.materia_idmateria = materia.idmateria INNER JOIN alunos ON presencas.alunos_idalunos = alunos.idalunos WHERE alunos.idalunos = ? GROUP BY materia.nome, horarios.hora_inicio, horarios.hora_fim, horarios.dia, horarios.atual ORDER BY horarios.dia ");
   const result = await connection.execute(sql,[idAluno])
    if(result[0].length < 1){
     return "Não há horários nesse ID"
    }else{
     for(let i = 0; i < result[0].length; i++){  
-    corpoDiasHorarios[result[0][i].Dia].push({Disciplina: result[0][i].Disciplina, Início: result[0][i].Inicio, Fim: result[0][i].Fim});
+    corpoDiasHorarios[result[0][i].Dia].push({Disciplina: result[0][i].Disciplina, Início: result[0][i].Inicio, Fim: result[0][i].Fim, Atual: result[0][i].Atual});
   }
   return objetoCorpo;
 }}

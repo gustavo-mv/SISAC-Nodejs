@@ -13,6 +13,15 @@
 <script>
 var socket = io();
 socket.emit("loginprof");
+
+const nomeAluno = "Gustavo";
+
+socket.emit("presencaAluno",(nomeAluno));
+
+socket.on('presente', (nomeAluno)=> {
+    console.log(nomeAluno + " está presente.");
+})
+
 socket.on('valor',(idValor)=>{
     console.log(idValor);
 })

@@ -14,17 +14,22 @@ const PORT = process.env.PORT || 3333;
 
 io.on('connection', (socket) => {
 
-  socket.on('loginprof',async ()=>{
+  socket.on('loginprof', async ()=>{
     await connection.query("INSERT INTO `loginprof` (`codigoLogin`) VALUES (?)",[socket.id])
     io.emit("valor",socket.id)
   })
 
+  socket.on("presencaAluno",(nomeAluno)=>{
+  
+  io.emit("presente",(nomeAluno));
+
+  })
 
   socket.on('disconnect',()=>{
     connection.query("DELETE FROM `loginprof` WHERE `codigoLogin` = ?",[socket.id]);
   })
-});
 
+});
 
 http.listen(PORT,() =>
   console.log(`O servidor está sendo executado em ${PORT}`)
