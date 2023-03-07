@@ -109,6 +109,21 @@ const deletarHorarios = async (req, res) => {
   return res.status(200).json(result);
 };
 
+
+const parearDispositivo = async (req, res) => {
+  const authToken = req.headers['authorization'];
+  if(authToken != undefined){
+    const bearer = authToken.split(' ');
+    const token = bearer[1];
+    const valorEscaneado = req.body.valorEscaneado;
+    const result = await professorModel.parearDispositivo(token,valorEscaneado);
+    return res.status(201).json(result);
+  }else{
+    return res.status(401).json("Não autorizado.")
+  }
+
+};
+
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
@@ -122,5 +137,6 @@ module.exports = {
   consultarAlunosPresentes,
   criarAula,
   inserirHorario,
-  deletarHorarios
+  deletarHorarios,
+  parearDispositivo
 };

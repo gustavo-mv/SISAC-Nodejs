@@ -1,13 +1,9 @@
-const express = require("express");
-const app = express();
-const router = require("./router");
-app.use(router);
+const app = require('./app');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 require("dotenv").config();
 const cron = require("node-cron");
 const connection = require("./models/connection");
-const servidorController = require("./controllers/servidorController");
 
 
 const PORT = process.env.PORT || 3333;
@@ -16,13 +12,13 @@ io.on('connection', (socket) => {
 
   socket.on('loginprof', async ()=>{
     await connection.query("INSERT INTO `loginprof` (`codigoLogin`) VALUES (?)",[socket.id])
-    io.emit("valor",socket.id)
+    const result = await connection.query("SELECT * FROM `loginprof` WHERE `codigoLogin` = ?",[socket.id])
+    socket.join(result[0][0]["id"]);
+    io.to(result[0][0]["id"]).emit("valor","Você está na sala: " + result[0][0]["id"])
   })
 
-  socket.on("presencaAluno",(nomeAluno)=>{
-  
-  io.emit("presente",(nomeAluno));
-
+  socket.on("parear",(info)=>{
+    io.to(info.id).emit("pareado",info.token);
   })
 
   socket.on('disconnect',()=>{
@@ -37,6 +33,7 @@ http.listen(PORT,() =>
 
 setTimeout(async function(){
   await connection.execute("UPDATE `horarios` SET `atual` = 0 WHERE `atual` = 1 ")
+  await connection.execute("DELETE FROM `loginprof`")
 }, 1000) 
 
 

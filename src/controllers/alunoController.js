@@ -1,5 +1,6 @@
 const alunoModel = require("../models/alunoModel");
 
+
 const adicionarPresenca = async (req, res) => {
   const idAluno = req.body.idAluno;
   const idAula = req.body.idAula;
@@ -16,6 +17,7 @@ const adicionarPresencaQR = async (req, res) => {
 };
 
 const consultarPresencas = async (req, res) => {
+  console.log(req.params.idAluno);
   const idAluno = req.params.idAluno;
   if (idAluno != null) {
     const result = await alunoModel.consultarPresencas(idAluno);

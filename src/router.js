@@ -122,6 +122,11 @@ router.post("/aluno/presenca", alunoController.adicionarPresenca);
 router.post("/aluno/presencaQR", alunoController.adicionarPresencaQR);
 
 router.post("/aluno/presencaMarcada", alunoController.verPresencaMarcada);
+router.post(
+  "/professor/parearDispositivo/",
+  professorController.parearDispositivo
+);
+
 
 router.post("/coordenador/alunos/curso", coordenadorController.verAlunos);
 router.post("/coordenador/aluno/faltas", coordenadorController.verFaltas);

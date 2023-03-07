@@ -143,6 +143,21 @@ const deletarHorarios = async (idMateria) => {
   }
 }
 
+const parearDispositivo = async (token,valorEscaneado) => {
+  let sql = "SELECT * FROM `loginprof` WHERE `codigoLogin` = ?"
+  const result = await connection.query(sql,[valorEscaneado]);
+  if(result[0].length > 0){
+  const corpoValidado = {
+  token: token,
+  id: result[0][0]["id"]
+  }
+  return corpoValidado;
+}else{
+  return "ID não consta."
+}
+
+}
+
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,
@@ -158,4 +173,5 @@ module.exports = {
   inserirAula,
   inserirHorario,
   deletarHorarios,
+  parearDispositivo
 };
