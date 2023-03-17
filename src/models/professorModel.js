@@ -97,7 +97,9 @@ const loginProfessor = async (usuario, senha) => {
     const sql = "SELECT * FROM professores WHERE usuario = ?";
     result = await connection.query(sql,[usuario])
     if(result[0].length < 1){
-      return "Credenciais Incorretas."
+      return {
+        result: false
+       }
     }else{
       const validarSenha = await bcrypt.compare(senha,result[0][0]["senha"]);
       if(validarSenha) {
@@ -105,10 +107,13 @@ const loginProfessor = async (usuario, senha) => {
            return {
             id: result[0][0].idprofessor ,
             nome: result[0][0].nome,
-            token: token
+            token: token,
+            result: true
            };
       }else{
-        return "Credenciais Incorretas."
+        return {
+          result: false
+         }
       }
     }
 };

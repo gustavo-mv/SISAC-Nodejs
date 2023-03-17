@@ -25,7 +25,7 @@ if(result[0][0].resultado == 1){
 const consultarPresencas = async (idAluno) => {
   if (idAluno) {
     const result = await connection.execute(
-      `SELECT materia.nome as Disciplina, aulas.data as Dia FROM aulas INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria INNER JOIN alunospresentes ON alunospresentes.aulas_idAulas = aulas.idAulas WHERE alunospresentes.idalunos = ${idAluno}`
+      `SELECT materia.nome as Disciplina, aulas.data as Dia FROM aulas INNER JOIN materia ON aulas.materia_idmateria = materia.idmateria INNER JOIN alunospresentes ON alunospresentes.aulas_idAulas = aulas.idAulas WHERE alunospresentes.idalunos = ${idAluno} ORDER BY aulas.data DESC`
     );
     return result[0];
   } else {
