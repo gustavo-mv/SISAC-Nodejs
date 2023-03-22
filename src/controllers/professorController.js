@@ -48,15 +48,19 @@ const criarAula = async (req,res) =>{
   const carga = req.body.cargaHoraria;
   const idMateria = req.body.idMateria;
   const validaQR = req.body.validaQR;
-  await professorModel.inserirAula(token,carga,idMateria,validaQR)
+  const result = await professorModel.inserirAula(token,carga,idMateria,validaQR);
   if(carga == null || idMateria == null){
     return "Alguma informação está inválida."
   }
   if(validaQR == 1){
-    return res.status(201).json(token)
-  }
-  else{
-    return res.status(201).json("Aula criada com sucesso! QR não foi criado.")
+    return res.status(201).json({
+      token: token,
+      idAula: result[0][0]["LAST_INSERT_ID()"]
+    })
+  }else{
+    return res.status(201).json({
+      idAula: result[0][0]["LAST_INSERT_ID()"]
+    })
   }
 }
 
