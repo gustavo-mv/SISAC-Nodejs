@@ -12,19 +12,13 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script>
 var socket = io();
-socket.emit("loginprof");
 
-const nomeAluno = "Gustavo";
+const idAula = 74;
+socket.emit("chamadaAberta",idAula);
+socket.on("alunoPresente",(mapaAluno)=>{
+    console.log(mapaAluno);
+    })
 
-socket.emit("presencaAluno",(nomeAluno));
-
-socket.on('presente', (nomeAluno)=> {
-    console.log(nomeAluno + " está presente.");
-})
-
-socket.on('valor',(idValor)=>{
-    console.log(idValor);
-}) 
 </script>   
 </body>
 

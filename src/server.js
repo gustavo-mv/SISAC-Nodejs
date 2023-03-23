@@ -10,19 +10,16 @@ const PORT = process.env.PORT || 3333;
 
 io.on('connection', (socket) => {
 
-  socket.on('loginprof', async ()=>{
-    await connection.query("INSERT INTO `loginprof` (`codigoLogin`) VALUES (?)",[socket.id])
-    const result = await connection.query("SELECT * FROM `loginprof` WHERE `codigoLogin` = ?",[socket.id])
-    socket.join(result[0][0]["id"]);
-    io.to(result[0][0]["id"]).emit("valor","Você está na sala: " + result[0][0]["id"])
-  })
+  socket.on("criouChamada",(idAula) => {
+    socket.join(idAula);
 
-  socket.on("parear",(info)=>{
-    io.to(info.id).emit("pareado",info.token);
-  })
+    socket.on("alunoPresente",(idAula) => {
+      console.log(idAula);
+    })
 
-  socket.on('disconnect',()=>{
-    connection.query("DELETE FROM `loginprof` WHERE `codigoLogin` = ?",[socket.id]);
+  })
+  socket.on("presente", (dados) => {
+    socket.to(dados.idAula).emit("alunoPresente",dados)
   })
 
 });

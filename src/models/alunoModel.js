@@ -1,5 +1,10 @@
 const { json } = require("express");
 const connection = require("./connection");
+const app = require('../app');
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+
 
 
 const adicionarPresenca = async (idAluno, idAula) => {
@@ -14,9 +19,15 @@ const adicionarPresenca = async (idAluno, idAula) => {
 const adicionarPresencaQR = async (idAluno, idAula, token) => {
 const result = await connection.execute("SELECT IF(token = ?, true, false) AS resultado FROM aulas WHERE aulas.idAulas = ?",[token, idAula]);
 if(result[0][0].resultado == 1){
+  const dadosAluno = await connection.execute("SELECT * FROM alunos WHERE idalunos = ?",[idAluno])
   await connection.execute("INSERT INTO `alunospresentes`(`aulas_idAulas`,`idalunos`) VALUES (?,?)",[idAula, idAluno])
-    return "ok";
+  const corpoAluno = {
+    Nome: dadosAluno[0]['nome'],
+    Curso: dadosAluno[0]['curso']
+  }
+  return "ok"
 }else{
+
   return "qrcodeinvalido"
 }
 };
