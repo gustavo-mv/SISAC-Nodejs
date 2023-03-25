@@ -55,11 +55,11 @@ const criarAula = async (req,res) =>{
   if(validaQR == 1){
     return res.status(201).json({
       token: token,
-      idAula: result[0][0]["LAST_INSERT_ID()"]
+      idAula: result[0][0]['MAX(`idAulas`)']
     })
   }else{
     return res.status(201).json({
-      idAula: result[0][0]["LAST_INSERT_ID()"]
+      idAula: result[0][0]['MAX(`idAulas`)']
     })
   }
 }

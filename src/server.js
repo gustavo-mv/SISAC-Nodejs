@@ -8,21 +8,22 @@ const connection = require("./models/connection");
 
 const PORT = process.env.PORT || 3333;
 
+
 io.on('connection', (socket) => {
 
   socket.on("criouChamada",(idAula) => {
     socket.join(idAula);
+    console.log("sala " + idAula + " criada do tipo: " + typeof idAula);
 
-    socket.on("alunoPresente",(idAula) => {
-      console.log(idAula);
-    })
-
-  })
-  socket.on("presente", (dados) => {
-    socket.to(dados.idAula).emit("alunoPresente",dados)
+    
   })
 
+  socket.on("presente",(idAula) => {
+  console.log("chamada de numero " + idAula + " feita do tipo: " + typeof idAula);
+  socket.to(idAula).emit("presenteProfessor", "cheguei aqui!")
 });
+
+})
 
 http.listen(PORT,() =>
   console.log(`O servidor está sendo executado em ${PORT}`)
@@ -65,5 +66,5 @@ if(horaArray < horaReal){
    const sqlFechar = "UPDATE `horarios` SET `atual` = 0 WHERE idhorario = ?" 
    await connection.execute(sqlFechar,[idHorarioLista])
    aulasAbertas.splice(aulasAbertas[i],1)
-   }}
+   }}
 })

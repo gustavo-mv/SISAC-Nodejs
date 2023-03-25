@@ -120,17 +120,19 @@ const loginProfessor = async (usuario, senha) => {
 
 const inserirAula = async (token,carga,idMateria,validaQR) => {
   if(validaQR == 1){
-  let sql = "INSERT INTO `aulas`(`data`,`carga`, `materia_idmateria`,`validacao_qrcode`, `token`) VALUES (NOW(),?,?,?,?);"
-  await connection.query(sql,[carga,idMateria,validaQR,token]);
-  const result = connection.query("SELECT LAST_INSERT_ID();")
-  return result;
-  }else{
-   let sql = "INSERT INTO `aulas`(`data`,`carga`, `materia_idmateria`) VALUES (NOW(),?,?)"
-   await connection.query(sql,[carga,idMateria]);
-   const result = connection.query("SELECT LAST_INSERT_ID();")
-   return result;
+    let sql = "INSERT INTO `aulas`(`data`,`carga`, `materia_idmateria`,`validacao_qrcode`, `token`) VALUES (NOW(),?,?,?,?);"
+    await connection.query(sql,[carga,idMateria,validaQR,token]);
+    const result = await connection.query("SELECT MAX(`idAulas`) FROM `aulas`");
+    return result;
+  } else {
+    let sql = "INSERT INTO `aulas`(`data`,`carga`, `materia_idmateria`) VALUES (NOW(),?,?)"
+    await connection.query(sql,[carga,idMateria]);
+    const result = await connection.query("SELECT MAX(`idAulas`) FROM `aulas`");
+    return result;
   }
 }
+
+
 
 const inserirHorario = async (corpoHorario) => {
   if(corpoHorario.length < 4){
