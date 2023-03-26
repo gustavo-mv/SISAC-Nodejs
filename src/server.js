@@ -13,18 +13,16 @@ io.on('connection', (socket) => {
 
   socket.on("criouChamada",(idAula) => {
     socket.join(idAula);
-    console.log("sala " + idAula + " criada do tipo: " + typeof idAula);
   })
 
   socket.on("presente",(dadosPresente) => {
-
-  corpoDadosAluno = {
+  const corpoDadosAluno = {
     idAluno: dadosPresente.idAluno,
     nomeAluno: dadosPresente.nomeAluno
   }
-
-  socket.to(dados.idAula).emit("presenteProfessor", corpoDadosAluno);
+  socket.to(dadosPresente.idAula).emit("presenteProfessor", corpoDadosAluno);
 });
+
 
 })
 
