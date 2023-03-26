@@ -81,6 +81,22 @@ const consultarAulaDisciplina = async (idMateria) => {
   } else return result[0];
 };
 
+const updateQRAula = async (idAulas) => {
+    function gerarToken(length) {
+      const caracteres ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let token = '';
+      const caracteresLength = caracteres.length;
+        for ( let i = 0; i < length; i++ ) {
+        token += caracteres.charAt(Math.floor(Math.random() * caracteresLength));
+      }
+      return token;
+  }
+
+    const token = gerarToken(15);
+    await connection.execute(`UPDATE aulas SET token = ? WHERE idAulas = ?`,[token,idAulas]);
+    return token;
+  };
+
 const adicionarNaMateria = async (idAluno, idMateria) => {
   if (idAluno !== undefined && idMateria !== undefined) {
     await connection.query(
@@ -184,5 +200,6 @@ module.exports = {
   inserirAula,
   inserirHorario,
   deletarHorarios,
-  parearDispositivo
+  parearDispositivo,
+  updateQRAula
 };

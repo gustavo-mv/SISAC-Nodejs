@@ -74,8 +74,6 @@ router.post(
 );
 
 
-
-
 router.get("/aluno/:idAluno?/", alunoController.verTodasDisciplinas);
 
 router.get("/aluno/:idAluno?/presenca", alunoController.consultarPresencas);
@@ -89,6 +87,12 @@ router.post(
   "/professor/:idProf?/criarAula",
   professorController.criarAula
 );
+
+router.put(
+  "/professor/:idProf?/criarAula",
+  professorController.updateQRAula
+);
+
 
 router.post(
   "/professor/:idProf?/alunosPresentes/",

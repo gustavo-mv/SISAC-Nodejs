@@ -34,6 +34,13 @@ const verTodosAlunos = async (req, res) => {
   return res.status(201).json(result);
 };
 
+
+const updateQRAula = async (req, res) => {
+  const idAula = req.body.idAula;
+  const result = await professorModel.updateQRAula(idAula);
+  return res.status(200).json({token:result});
+};
+
 const criarAula = async (req,res) =>{
    function gerarToken(length) {
       const caracteres ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -142,5 +149,6 @@ module.exports = {
   criarAula,
   inserirHorario,
   deletarHorarios,
-  parearDispositivo
+  parearDispositivo,
+  updateQRAula
 };
