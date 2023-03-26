@@ -14,13 +14,16 @@ io.on('connection', (socket) => {
   socket.on("criouChamada",(idAula) => {
     socket.join(idAula);
     console.log("sala " + idAula + " criada do tipo: " + typeof idAula);
-
-    
   })
 
-  socket.on("presente",(idAula) => {
-  console.log("chamada de numero " + idAula + " feita do tipo: " + typeof idAula);
-  socket.to(idAula).emit("presenteProfessor", "cheguei aqui!")
+  socket.on("presente",(dadosPresente) => {
+
+  corpoDadosAluno = {
+    idAluno: dadosPresente.idAluno,
+    nomeAluno: dadosPresente.nomeAluno
+  }
+
+  socket.to(dados.idAula).emit("presenteProfessor", corpoDadosAluno);
 });
 
 })
