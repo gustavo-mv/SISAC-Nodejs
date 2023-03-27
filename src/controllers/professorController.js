@@ -81,6 +81,13 @@ const fecharAula = async (req, res) => {
     }
 };
 
+const removerAluno = async (req, res) => {
+  const idAluno = req.body.idAluno;
+  const idAula = req.body.idAula;
+  const result = await professorModel.removerAluno(idAluno, idAula);
+  return res.status(200).json(result);
+};
+
 const consultarAulaDisciplina = async (req, res) => {
   const idMateria = req.body.idMateria;
   const result = await professorModel.consultarAulaDisciplina(idMateria);
@@ -150,5 +157,6 @@ module.exports = {
   inserirHorario,
   deletarHorarios,
   parearDispositivo,
-  updateQRAula
+  updateQRAula,
+  removerAluno
 };

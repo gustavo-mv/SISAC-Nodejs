@@ -93,6 +93,10 @@ router.put(
   professorController.updateQRAula
 );
 
+router.delete(
+  "/professor/:idProf?/removerAluno",
+  professorController.removerAluno
+);
 
 router.post(
   "/professor/:idProf?/alunosPresentes/",
