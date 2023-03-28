@@ -104,6 +104,11 @@ router.post(
 );
 
 router.post(
+  "/professor/:idProf?/presentesAula/",
+  professorController.verificarAlunosAula,
+);
+
+router.post(
   "/professor/:idProf?/adicionarNaMateria/",
   professorController.adicionarNaMateria
 );

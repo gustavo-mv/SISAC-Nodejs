@@ -188,9 +188,23 @@ const parearDispositivo = async (token,valorEscaneado) => {
 }else{
   return "ID não consta."
 }
-
 }
 
+const verificarAlunosAula = async (idMateria,idAula) => {
+
+  sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ?`
+  sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos 
+WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?);`
+
+const resultadoPresentes = await connection.query(sqlPresentes,[idAula]);
+const resultadoFaltantes = await connection.query(sqlFaltantes,[idMateria,idAula]);
+
+const resultadoTotal = {
+  Presentes: resultadoPresentes[0],
+  Faltantes: resultadoFaltantes[0]
+}
+return resultadoTotal
+}
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,
@@ -208,5 +222,6 @@ module.exports = {
   deletarHorarios,
   parearDispositivo,
   updateQRAula,
-  removerAluno
-};
+  removerAluno,
+  verificarAlunosAula
+}
