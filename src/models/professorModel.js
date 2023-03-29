@@ -190,21 +190,23 @@ const parearDispositivo = async (token,valorEscaneado) => {
 }
 }
 
-const verificarAlunosAula = async (idMateria,idAula) => {
+const verificarAlunosAula = async (idAula) => {
+  const sqlMateria = `SELECT materia_idmateria FROM aulas WHERE idAulas = ?`;
+  const sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ?`;
+  const sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?)`;
 
-  sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ?`
-  sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos 
-WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?);`
+  const [[{ materia_idmateria }]] = await connection.query(sqlMateria, [idAula]);
 
-const resultadoPresentes = await connection.query(sqlPresentes,[idAula]);
-const resultadoFaltantes = await connection.query(sqlFaltantes,[idMateria,idAula]);
+  const [resultadoPresentes] = await connection.query(sqlPresentes, [idAula]);
+  const [resultadoFaltantes] = await connection.query(sqlFaltantes, [materia_idmateria, idAula]);
 
-const resultadoTotal = {
-  Presentes: resultadoPresentes[0],
-  Faltantes: resultadoFaltantes[0]
-}
-return resultadoTotal
-}
+  const resultadoTotal = {
+    Presentes: resultadoPresentes,
+    Faltantes: resultadoFaltantes,
+  };
+
+  return resultadoTotal;
+};
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,

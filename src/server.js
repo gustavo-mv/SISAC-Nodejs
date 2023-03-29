@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
     idAluno: dadosPresente.idAluno,
     nomeAluno: dadosPresente.nomeAluno
   }
-  socket.to(dadosPresente.idAula).emit("presenteProfessor", corpoDadosAluno);
+  socket.to(dadosPresente.idAula).emit("presenteProfessor", JSON.stringify(corpoDadosAluno));
 });
 
 

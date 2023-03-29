@@ -21,9 +21,8 @@ const consultarAlunosPresentes = async (req, res) => {
   return res.status(200).json(alunos);
 };
 const verificarAlunosAula = async (req, res) => {
-  const idMateria = req.body.idMateria;
   const idAula = req.body.idAula;
-  const alunos = await professorModel.verificarAlunosAula(idMateria,idAula);
+  const alunos = await professorModel.verificarAlunosAula(idAula);
   return res.status(200).json(alunos);
 };
 
