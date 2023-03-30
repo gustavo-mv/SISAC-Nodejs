@@ -161,6 +161,9 @@ const inserirHorario = async (corpoHorario) => {
 }
 
 const removerAluno = async (idAluno,idAula) => {
+    if(idAluno.length == 0){
+      return 'ok';
+    }
     let sql = "DELETE FROM alunospresentes WHERE aulas_idAulas = ? AND idalunos IN (?)"
     await connection.query(sql,[idAula,idAluno]);
     return "ok"
@@ -191,16 +194,17 @@ const parearDispositivo = async (token,valorEscaneado) => {
 }
 
 const verificarAlunosAula = async (idAula) => {
-  const sqlMateria = `SELECT materia_idmateria FROM aulas WHERE idAulas = ?`;
+  const sqlMateria = `SELECT materia_idmateria, carga FROM aulas WHERE idAulas = ?`;
   const sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ?`;
   const sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?)`;
 
-  const [[{ materia_idmateria }]] = await connection.query(sqlMateria, [idAula]);
+  const [[{ materia_idmateria, carga }]] = await connection.query(sqlMateria, [idAula]);
 
   const [resultadoPresentes] = await connection.query(sqlPresentes, [idAula]);
   const [resultadoFaltantes] = await connection.query(sqlFaltantes, [materia_idmateria, idAula]);
 
   const resultadoTotal = {
+    Carga: carga,
     Presentes: resultadoPresentes,
     Faltantes: resultadoFaltantes,
   };
