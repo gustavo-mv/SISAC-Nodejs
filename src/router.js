@@ -122,6 +122,12 @@ router.post(
   "/professor/:idProf?/horario/",
   professorController.inserirHorario
 );
+
+router.post(
+  "/professor/:idProf?/inserirAlunosPresentes/",
+  professorController.inserirAlunosPresentes
+);
+
 router.delete("/professor/:idProf?/horario/", professorController.deletarHorarios);
 
 router.post("/professor/:idProf?/adicionarAula/", professorController.addAula);

@@ -199,18 +199,27 @@ const verificarAlunosAula = async (idAula) => {
   const sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?)`;
 
   const [[{ materia_idmateria, carga }]] = await connection.query(sqlMateria, [idAula]);
-
   const [resultadoPresentes] = await connection.query(sqlPresentes, [idAula]);
   const [resultadoFaltantes] = await connection.query(sqlFaltantes, [materia_idmateria, idAula]);
-
   const resultadoTotal = {
     Carga: carga,
     Presentes: resultadoPresentes,
     Faltantes: resultadoFaltantes,
   };
-
   return resultadoTotal;
 };
+  const inserirAlunosPresentes = async (corpoPresencas) => {
+  const listaPresentes = corpoPresencas["presentes"];  
+  const listaPresentesQuery = [];
+  const listaIDsPresentes = [];
+  for(let i = 0; i < listaPresentes.length ; i++){
+  listaPresentesQuery.push([listaPresentes[i]["idalunos"],corpoPresencas["idAula"],listaPresentes[i]["Carga"]])
+  listaIDsPresentes.push(listaPresentes[i]["idalunos"])
+}
+   await connection.query("DELETE FROM alunospresentes WHERE aulas_idAulas = ?", [corpoPresencas["idAula"]])
+   await connection.query("INSERT INTO alunospresentes (idalunos,aulas_idAulas,carga) VALUES ? ",[listaPresentesQuery]);
+  return "ok";
+}
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,
@@ -229,5 +238,6 @@ module.exports = {
   parearDispositivo,
   updateQRAula,
   removerAluno,
-  verificarAlunosAula
+  verificarAlunosAula,
+  inserirAlunosPresentes
 }

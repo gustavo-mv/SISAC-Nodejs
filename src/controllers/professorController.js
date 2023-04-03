@@ -147,6 +147,15 @@ const parearDispositivo = async (req, res) => {
 
 };
 
+
+const inserirAlunosPresentes = async (req, res) => {
+  const corpoPresencas = req.body.corpoPresencas;
+  const result = await professorModel.inserirAlunosPresentes(corpoPresencas);
+  return res.status(200).json(result);
+};
+
+
+
 module.exports = {
   todasAsDisciplinas,
   todasAsPresencas,
@@ -164,5 +173,6 @@ module.exports = {
   parearDispositivo,
   updateQRAula,
   removerAluno,
-  verificarAlunosAula
+  verificarAlunosAula,
+  inserirAlunosPresentes
 };
