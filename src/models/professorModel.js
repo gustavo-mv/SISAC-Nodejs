@@ -1,6 +1,7 @@
 const connection = require("./connection");
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken");
+const { connect } = require("http2");
 const JWTSecret = "spaiodjkfopasijdf"
 
 
@@ -57,11 +58,14 @@ const verTodosAlunos = async (idProf) => {
 };
 
 const fecharAula = async (idAula) => {
-  await connection.execute(
-    "UPDATE `aulas` SET `finalizada` = 1 WHERE idAulas = ?",
-    [idAula]
-  );
+  const result = await connection.execute("SELECT validacao_qrcode FROM aulas WHERE idAulas = ?",[idAula])
+  if(result[0].length > 0){
+  await connection.execute("UPDATE `aulas` SET `finalizada` = 1 , token = NULL WHERE idAulas = ?",[idAula]);
   return "Aula encerrada com sucesso.";
+  }else{
+    await connection.execute("UPDATE `aulas` SET `finalizada` = 1 WHERE idAulas = ?",[idAula]);
+    return "Aula encerrada com sucesso.";
+  }
 };
 
 const addAula = async (idMateria, carga, data) => {
@@ -108,6 +112,29 @@ const adicionarNaMateria = async (idAluno, idMateria) => {
     return "O ID do aluno ou ID da Matéria são inválidos";
   }
 };
+
+const verHorariosMateria = async (idMateria) => {
+  const corpoDiasHorarios = [[],[],[],[],[],[],[]]
+  const objetoCorpo = {
+    "Domingo": corpoDiasHorarios[0],
+    "Segunda": corpoDiasHorarios[1],
+    "Terça": corpoDiasHorarios[2],
+    "Quarta": corpoDiasHorarios[3],
+    "Quinta": corpoDiasHorarios[4],
+    "Sexta": corpoDiasHorarios[5],
+    "Sábado": corpoDiasHorarios[6]
+  }
+    const sql = (
+    "SELECT horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia FROM horarios WHERE idmateria = ?");
+    const result = await connection.execute(sql,[idMateria])
+     if(result[0].length < 1){
+      return "Não há horários nesse ID"
+     }else{
+      for(let i = 0; i < result[0].length; i++){  
+      corpoDiasHorarios[result[0][i].Dia].push({Início: result[0][i].Inicio, Fim: result[0][i].Fim});
+    }
+    return objetoCorpo;
+  }}
 
 const loginProfessor = async (usuario, senha) => {
     const sql = "SELECT * FROM professores WHERE usuario = ?";
@@ -239,5 +266,6 @@ module.exports = {
   updateQRAula,
   removerAluno,
   verificarAlunosAula,
-  inserirAlunosPresentes
+  inserirAlunosPresentes,
+  verHorariosMateria
 }

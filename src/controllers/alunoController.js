@@ -4,7 +4,11 @@ const adicionarPresenca = async (req, res) => {
   const idAluno = req.body.idAluno;
   const idAula = req.body.idAula;
   const result = await alunoModel.adicionarPresenca(idAluno, idAula);
+  if (result === "ok"){
   return res.status(200).json(result);
+}else{
+  return res.status(404).json(result)
+}
 };
 
 const adicionarPresencaQR = async (req, res) => {

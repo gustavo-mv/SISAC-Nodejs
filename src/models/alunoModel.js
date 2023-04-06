@@ -8,16 +8,20 @@ const io = require('socket.io')(http);
 
 
 const adicionarPresenca = async (idAluno, idAula) => {
-     await connection.execute(
+const result = await connection.execute("SELECT * FROM aulas WHERE aulas.idAulas = ? AND aulas.finalizada = 0",[idAula]);
+if(result[0].length > 0){
+  await connection.execute(
     "INSERT INTO `alunospresentes`(`aulas_idAulas`,`idalunos`) VALUES (?,?)",
-    [idAula, idAluno]
-  );
+    [idAula, idAluno]) 
   return "ok";
+}else{
+  return "Não existe."
+  }
 };
 
 
 const adicionarPresencaQR = async (idAluno, idAula, token) => {
-const result = await connection.execute("SELECT IF(token = ?, true, false) AS resultado FROM aulas WHERE aulas.idAulas = ?",[token, idAula]);
+const result = await connection.execute("SELECT IF(token = ?, true, false) AS resultado FROM aulas WHERE aulas.idAulas = ? AND aulas.finalizada = 0",[token, idAula]);
 if(result[0][0].resultado == 1){
   const dadosAluno = await connection.execute("SELECT * FROM alunos WHERE idalunos = ?",[idAluno])
   await connection.execute("INSERT INTO `alunospresentes`(`aulas_idAulas`,`idalunos`) VALUES (?,?)",[idAula, idAluno])
@@ -27,7 +31,6 @@ if(result[0][0].resultado == 1){
   }
   return "ok"
 }else{
-
   return "qrcodeinvalido"
 }
 };

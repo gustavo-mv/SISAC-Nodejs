@@ -40,6 +40,12 @@ const verTodosAlunos = async (req, res) => {
 };
 
 
+const verHorariosMateria = async (req, res) => {
+  const idMateria = req.params.idMateria;
+  const result = await professorModel.verHorariosMateria(idMateria);
+  return res.status(200).json(result);
+};
+
 const updateQRAula = async (req, res) => {
   const idAula = req.body.idAula;
   const result = await professorModel.updateQRAula(idAula);
@@ -174,5 +180,6 @@ module.exports = {
   updateQRAula,
   removerAluno,
   verificarAlunosAula,
-  inserirAlunosPresentes
+  inserirAlunosPresentes,
+  verHorariosMateria
 };
