@@ -102,7 +102,7 @@ const removerAluno = async (req, res) => {
 const consultarAulaDisciplina = async (req, res) => {
   const idMateria = req.body.idMateria;
   const result = await professorModel.consultarAulaDisciplina(idMateria);
-  return res.status(201).json(result);
+  return res.status(200).json(result);
 };
 
 const addAula = async (req, res) => {

@@ -78,10 +78,10 @@ const addAula = async (idMateria, carga, data) => {
 
 const consultarAulaDisciplina = async (idMateria) => {
   const result = await connection.execute(
-    `SELECT * FROM aulas WHERE materia_idmateria = ${idMateria} && !finalizada`
+    `SELECT * FROM aulas WHERE materia_idmateria = ${idMateria}`
   );
   if (Object.keys(result[0]).length === 0) {
-    return "Não há aulas finalizadas com o ID dessa matéria";
+    return result[0];
   } else return result[0];
 };
 
