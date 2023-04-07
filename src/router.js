@@ -108,7 +108,7 @@ router.post(
   professorController.verificarAlunosAula,
 );
 
-router.post(
+router.get(
   "/professor/:idProf?/horarios/:idMateria?/",
   professorController.verHorariosMateria,
 );

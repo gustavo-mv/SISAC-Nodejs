@@ -131,7 +131,7 @@ const verHorariosMateria = async (idMateria) => {
       return "Não há horários nesse ID"
      }else{
       for(let i = 0; i < result[0].length; i++){  
-      corpoDiasHorarios[result[0][i].Dia].push({Início: result[0][i].Inicio, Fim: result[0][i].Fim});
+      corpoDiasHorarios[result[0][i].Dia].push({Inicio: result[0][i].Inicio, Fim: result[0][i].Fim});
     }
     return objetoCorpo;
   }}
