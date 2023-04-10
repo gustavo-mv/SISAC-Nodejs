@@ -127,14 +127,11 @@ const verHorariosMateria = async (idMateria) => {
     const sql = (
     "SELECT horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia FROM horarios WHERE idmateria = ?");
     const result = await connection.execute(sql,[idMateria])
-     if(result[0].length < 1){
-      return "Não há horários nesse ID"
-     }else{
       for(let i = 0; i < result[0].length; i++){  
       corpoDiasHorarios[result[0][i].Dia].push({Inicio: result[0][i].Inicio, Fim: result[0][i].Fim});
     }
     return objetoCorpo;
-  }}
+  }
 
 const loginProfessor = async (usuario, senha) => {
     const sql = "SELECT * FROM professores WHERE usuario = ?";
@@ -181,7 +178,7 @@ const inserirHorario = async (corpoHorario) => {
   if(corpoHorario.length < 4){
     return "Alguma das informações está nula."
   }else{
-    let sql = "INSERT INTO `horarios`( `hora_inicio`, `hora_fim`, `idmateria`, `dia`) VALUES (?)"
+    let sql = "INSERT INTO `horarios`( `hora_inicio`, `hora_fim`,`dia`,`idmateria`) VALUES (?)"
     await connection.query(sql,[corpoHorario]);
     return "Horário Criado com Sucesso!"
   }
@@ -222,7 +219,7 @@ const parearDispositivo = async (token,valorEscaneado) => {
 
 const verificarAlunosAula = async (idAula) => {
   const sqlMateria = `SELECT materia_idmateria, carga FROM aulas WHERE idAulas = ?`;
-  const sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ?`;
+  const sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos, alunospresentes.carga as Carga FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ?`;
   const sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?)`;
 
   const [[{ materia_idmateria, carga }]] = await connection.query(sqlMateria, [idAula]);
@@ -235,18 +232,24 @@ const verificarAlunosAula = async (idAula) => {
   };
   return resultadoTotal;
 };
-  const inserirAlunosPresentes = async (corpoPresencas) => {
-  const listaPresentes = corpoPresencas["presentes"];  
-  const listaPresentesQuery = [];
-  const listaIDsPresentes = [];
-  for(let i = 0; i < listaPresentes.length ; i++){
-  listaPresentesQuery.push([listaPresentes[i]["idalunos"],corpoPresencas["idAula"],listaPresentes[i]["Carga"]])
-  listaIDsPresentes.push(listaPresentes[i]["idalunos"])
+const inserirAlunosPresentes = async (corpoPresencas) => {
+  if (corpoPresencas.hasOwnProperty("presentes")) {
+    const listaPresentes = corpoPresencas["presentes"];  
+    const listaPresentesQuery = [];
+    const listaIDsPresentes = [];
+    for(let i = 0; i < listaPresentes.length ; i++){
+      listaPresentesQuery.push([listaPresentes[i]["idalunos"],corpoPresencas["idAula"],listaPresentes[i]["Carga"]])
+      listaIDsPresentes.push(listaPresentes[i]["idalunos"])
+    }
+    await connection.query("DELETE FROM alunospresentes WHERE aulas_idAulas = ?", [corpoPresencas["idAula"]])
+    await connection.query("INSERT INTO alunospresentes (idalunos,aulas_idAulas,carga) VALUES ? ",[listaPresentesQuery]);
+    return "ok";
+  } else {
+    await connection.query("DELETE FROM alunospresentes WHERE aulas_idAulas = ?", [corpoPresencas["idAula"]])
+    return "A propriedade 'presentes' não existe no objeto 'corpoPresencas'.";
+  }
 }
-   await connection.query("DELETE FROM alunospresentes WHERE aulas_idAulas = ?", [corpoPresencas["idAula"]])
-   await connection.query("INSERT INTO alunospresentes (idalunos,aulas_idAulas,carga) VALUES ? ",[listaPresentesQuery]);
-  return "ok";
-}
+
 module.exports = {
   pegarDisciplinas,
   consultarPresencas,
