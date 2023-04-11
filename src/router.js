@@ -103,6 +103,11 @@ router.post(
   professorController.consultarAlunosPresentes,
 );
 
+router.get(
+  "/professor/:idProf?/cursosPolo/:idPolo?/",
+  professorController.consultarCursosPolo,
+);
+
 router.post(
   "/professor/:idProf?/presentesAula/",
   professorController.verificarAlunosAula,

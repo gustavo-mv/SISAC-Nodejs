@@ -172,7 +172,11 @@ const inserirAula = async (token,carga,idMateria,validaQR) => {
   }
 }
 
-
+const consultarCursosPolo = async (idPolo) => {
+    let sql = "SELECT * FROM cursos WHERE idpolo = ?"
+    const result = await connection.query(sql,idPolo);
+    return result[0];
+  }
 
 const inserirHorario = async (corpoHorario) => {
   if(corpoHorario.length < 4){
@@ -270,5 +274,6 @@ module.exports = {
   removerAluno,
   verificarAlunosAula,
   inserirAlunosPresentes,
-  verHorariosMateria
+  verHorariosMateria,
+  consultarCursosPolo
 }

@@ -92,6 +92,16 @@ const fecharAula = async (req, res) => {
     }
 };
 
+const consultarCursosPolo = async (req, res) => {
+  const idPolo = req.params.idPolo;
+    if (idPolo) {
+       const result = await professorModel.consultarCursosPolo(idPolo);
+       return res.status(200).json(result);
+    } else {
+       return "O id desse polo não é válido.";
+    }
+};
+
 const removerAluno = async (req, res) => {
   const idAluno = req.body.idAluno;
   const idAula = req.body.idAula;
@@ -181,5 +191,6 @@ module.exports = {
   removerAluno,
   verificarAlunosAula,
   inserirAlunosPresentes,
-  verHorariosMateria
+  verHorariosMateria,
+  consultarCursosPolo
 };
