@@ -201,8 +201,8 @@ const deletarHorarios = async (idMateria) => {
   if(idMateria == undefined){
     return "Alguma informação está nula."
   }else{
-    let sql = "DELETE FROM horarios WHERE idmateria = `idMateria`"
-    await connection.query(sql);
+    let sql = "DELETE FROM horarios WHERE idmateria = ?"
+    await connection.query(sql,idMateria);
     return "Todos os horários com esse ID foram deletados"
   }
 }
