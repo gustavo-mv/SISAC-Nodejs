@@ -115,6 +115,13 @@ const consultarAulaDisciplina = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const deletarUmHorarioEspecifico = async (req, res) => {
+  const idHorario = req.body.idHorario;
+  const result = await professorModel.deletarUmHorarioEspecifico(idHorario);
+  return res.status(200).json(result);
+};
+
+
 const addAula = async (req, res) => {
   const data = req.body.data;
   const idMateria = req.body.idMateria;
@@ -141,13 +148,11 @@ const inserirHorario = async (req, res) => {
   return res.status(201).json(result);
 };
 
-
 const deletarHorarios = async (req, res) => {
   const idMateria = req.body.idMateria;
   const result = await professorModel.deletarHorarios(idMateria);
   return res.status(200).json(result);
 };
-
 
 const parearDispositivo = async (req, res) => {
   const authToken = req.headers['authorization'];
@@ -192,5 +197,6 @@ module.exports = {
   verificarAlunosAula,
   inserirAlunosPresentes,
   verHorariosMateria,
-  consultarCursosPolo
+  consultarCursosPolo,
+  deletarUmHorarioEspecifico
 };

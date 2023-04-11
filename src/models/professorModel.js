@@ -176,7 +176,7 @@ const consultarCursosPolo = async (idPolo) => {
     let sql = "SELECT * FROM cursos WHERE idpolo = ?"
     const result = await connection.query(sql,idPolo);
     return result[0];
-  }
+}
 
 const inserirHorario = async (corpoHorario) => {
   if(corpoHorario.length < 4){
@@ -204,6 +204,16 @@ const deletarHorarios = async (idMateria) => {
     let sql = "DELETE FROM horarios WHERE idmateria = `idMateria`"
     await connection.query(sql);
     return "Todos os horários com esse ID foram deletados"
+  }
+}
+
+const deletarUmHorarioEspecifico = async (idHorario) => {
+  if(idHorario == undefined){
+    return "Alguma informação está nula."
+  }else{
+    let sql = "DELETE FROM horarios WHERE idhorario = ?"
+    await connection.query(sql,idHorario);
+    return "O horário com esse ID foi deletados"
   }
 }
 
@@ -275,5 +285,6 @@ module.exports = {
   verificarAlunosAula,
   inserirAlunosPresentes,
   verHorariosMateria,
-  consultarCursosPolo
+  consultarCursosPolo,
+  deletarUmHorarioEspecifico
 }

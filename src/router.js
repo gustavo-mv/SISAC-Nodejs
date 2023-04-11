@@ -68,6 +68,7 @@ router.post(
   alunoController.consultarAulasAbertas
 );
 
+
 router.post(
   "/aluno/:idAluno?/consultarPresencas/",
   alunoController.consultarPresencasEmUmaDisciplina
@@ -139,6 +140,9 @@ router.post(
 );
 
 router.delete("/professor/:idProf?/horario/", professorController.deletarHorarios);
+
+router.delete("/professor/:idProf?/deletarhorario/", professorController.deletarUmHorarioEspecifico);
+
 
 router.post("/professor/:idProf?/adicionarAula/", professorController.addAula);
 
