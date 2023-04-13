@@ -147,6 +147,7 @@ const loginProfessor = async (usuario, senha) => {
            return {
             id: result[0][0].idprofessor ,
             nome: result[0][0].nome,
+            idpolo:result[0][0].idpolo,
             token: token,
             result: true
            };
