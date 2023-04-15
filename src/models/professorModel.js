@@ -78,7 +78,7 @@ const addAula = async (idMateria, carga, data) => {
 
 const consultarAulaDisciplina = async (idMateria) => {
   const result = await connection.execute(
-    `SELECT * FROM aulas WHERE materia_idmateria = ${idMateria}`
+    `SELECT * FROM aulas WHERE materia_idmateria = ${idMateria} ORDER BY data DESC`
   );
   if (Object.keys(result[0]).length === 0) {
     return result[0];
