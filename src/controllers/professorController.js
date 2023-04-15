@@ -175,6 +175,13 @@ const inserirAlunosPresentes = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const alunosdeUmCurso = async (req, res) => {
+  const idCurso = req.body.idCurso;
+  const result = await professorModel.alunosdeUmCurso(idCurso);
+  return res.status(200).json(result);
+};
+
+
 
 
 module.exports = {
@@ -198,5 +205,6 @@ module.exports = {
   inserirAlunosPresentes,
   verHorariosMateria,
   consultarCursosPolo,
-  deletarUmHorarioEspecifico
+  deletarUmHorarioEspecifico,
+  alunosdeUmCurso
 };

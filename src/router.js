@@ -150,9 +150,13 @@ router.post("/professor/:idProf?/fecharAula", professorController.fecharAula);
 
 router.post("/professor/:idProf?/faltas", professorController.adicionarFaltas);
 
+router.post("/professor/:idProf?/alunosCursos", professorController.alunosdeUmCurso);
+
+
 router.post("/aluno/presenca", alunoController.adicionarPresenca);
 
 router.post("/aluno/presencaQR", alunoController.adicionarPresencaQR);
+
 
 router.post("/aluno/presencaMarcada", alunoController.verPresencaMarcada);
 router.post(
