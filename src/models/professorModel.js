@@ -128,8 +128,9 @@ const verHorariosMateria = async (idMateria) => {
     "SELECT horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia, horarios.idhorario FROM horarios WHERE idmateria = ?");
     const result = await connection.execute(sql,[idMateria])
       for(let i = 0; i < result[0].length; i++){  
+      if(typeof(result[0][i].Dia) !== "undefined" && result[0][i].Dia !== null && result[0][i].Dia >= 0 && result[0][i].Dia <= 6){
       corpoDiasHorarios[result[0][i].Dia].push({Inicio: result[0][i].Inicio, Fim: result[0][i].Fim, id: result[0][i].idhorario});
-    }
+    }}
     return objetoCorpo;
   }
 
