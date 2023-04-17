@@ -36,7 +36,11 @@ const consultarAlunosPresentes = async (idAula) => {
 const consultarAlunosDisciplina = async (idMateria) => {
   if (idMateria != null) {
     const [result] = await connection.execute(
-      `SELECT alunos.nome as Aluno, presencas.faltas as Faltas, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos where presencas.materia_idmateria = ${idMateria}`
+      `SELECT alunos.nome AS Aluno, cursos.nome AS Curso, presencas.faltas AS Faltas, alunos.idalunos
+      FROM alunos
+      INNER JOIN presencas ON presencas.alunos_idalunos = alunos.idalunos
+      INNER JOIN cursos ON alunos.idcurso = cursos.idcurso
+      WHERE presencas.materia_idmateria = ${idMateria};`
     );
     return result;
   }
@@ -249,7 +253,7 @@ const verificarAlunosAula = async (idAula) => {
   return resultadoTotal;
 };
 const inserirAlunosPresentes = async (corpoPresencas) => {
-  if (corpoPresencas.hasOwnProperty("presentes")) {
+  if (corpoPresencas.presentes.length > 0) {
     const listaPresentes = corpoPresencas["presentes"];  
     const listaPresentesQuery = [];
     const listaIDsPresentes = [];
