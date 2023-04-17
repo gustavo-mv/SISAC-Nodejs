@@ -177,7 +177,8 @@ const inserirAlunosPresentes = async (req, res) => {
 
 const alunosdeUmCurso = async (req, res) => {
   const idCurso = req.body.idCurso;
-  const result = await professorModel.alunosdeUmCurso(idCurso);
+  const idMateria = req.body.idMateria;
+  const result = await professorModel.alunosdeUmCurso(idCurso, idMateria);
   return res.status(200).json(result);
 };
 

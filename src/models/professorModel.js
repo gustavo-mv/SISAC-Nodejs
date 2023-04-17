@@ -272,8 +272,8 @@ const inserirAlunosPresentes = async (corpoPresencas) => {
 
 
 
-const alunosdeUmCurso = async (idCurso) => {
-  const result = await connection.query("SELECT idalunos, gra, nome FROM alunos WHERE idcurso = ?",idCurso);
+const alunosdeUmCurso = async (idCurso, idMateria) => {
+  const result = await connection.query("SELECT idalunos, gra, nome FROM alunos WHERE idcurso = ? AND idalunos NOT IN (SELECT alunos_idalunos FROM presencas WHERE materia_idmateria = ?)",idCurso, idMateria);
    if(result[0].length < 1){
     return "Não há alunos nesse curso"
    }else{
