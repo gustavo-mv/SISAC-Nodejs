@@ -10,7 +10,8 @@ const pegarDisciplinas = async (idProfessor) => {
       `SELECT materia.idmateria, materia.nome 
       as Disciplina, materia.periodo, professores.nome as professores 
       FROM materia INNER JOIN professores ON professores_idprofessor = 
-      professores.idprofessor WHERE ${idProfessor} = professores_idprofessor`
+      professores.idprofessor WHERE ${idProfessor} = professores_idprofessor
+      ORDER BY materia.nome ASC`
     );
     return result;
 };
@@ -40,7 +41,8 @@ const consultarAlunosDisciplina = async (idMateria) => {
       FROM alunos
       INNER JOIN presencas ON presencas.alunos_idalunos = alunos.idalunos
       INNER JOIN cursos ON alunos.idcurso = cursos.idcurso
-      WHERE presencas.materia_idmateria = ${idMateria};`
+      WHERE presencas.materia_idmateria = ${idMateria}
+      ORDER BY alunos.nome ASC;`
     );
     return result;
   }
@@ -129,7 +131,7 @@ const verHorariosMateria = async (idMateria) => {
     "Sábado": corpoDiasHorarios[6]
   }
     const sql = (
-    "SELECT horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia, horarios.idhorario FROM horarios WHERE idmateria = ?");
+    "SELECT horarios.hora_inicio AS Inicio, horarios.hora_fim AS Fim, horarios.dia AS Dia, horarios.idhorario FROM horarios WHERE idmateria = ? ORDER BY horarios.hora_inicio ASC");
     const result = await connection.execute(sql,[idMateria])
       for(let i = 0; i < result[0].length; i++){  
       if(typeof(result[0][i].Dia) !== "undefined" && result[0][i].Dia !== null && result[0][i].Dia >= 0 && result[0][i].Dia <= 6){
@@ -179,7 +181,7 @@ const inserirAula = async (token,carga,idMateria,validaQR) => {
 }
 
 const consultarCursosPolo = async (idPolo) => {
-    let sql = "SELECT * FROM cursos WHERE idpolo = ?"
+    let sql = "SELECT * FROM cursos WHERE idpolo = ? ORDER BY nome ASC"
     const result = await connection.query(sql,idPolo);
     return result[0];
 }
@@ -239,8 +241,8 @@ const parearDispositivo = async (token,valorEscaneado) => {
 
 const verificarAlunosAula = async (idAula) => {
   const sqlMateria = `SELECT materia_idmateria, carga FROM aulas WHERE idAulas = ?`;
-  const sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos, alunospresentes.carga as Carga FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ?`;
-  const sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?)`;
+  const sqlPresentes = `SELECT alunos.nome as Aluno, alunos.idalunos, alunospresentes.carga as Carga FROM alunospresentes INNER JOIN alunos ON alunospresentes.idalunos = alunos.idalunos WHERE alunospresentes.aulas_idAulas = ? ORDER BY alunos.nome ASC`;
+  const sqlFaltantes = `SELECT alunos.nome as Aluno, alunos.idalunos FROM alunos INNER JOIN presencas on presencas.alunos_idalunos = alunos.idalunos WHERE presencas.materia_idmateria = ? AND alunos.idalunos NOT IN (SELECT alunospresentes.idalunos FROM alunospresentes WHERE alunospresentes.aulas_idAulas = ?) ORDER BY alunos.nome ASC`;
 
   const [[{ materia_idmateria, carga }]] = await connection.query(sqlMateria, [idAula]);
   const [resultadoPresentes] = await connection.query(sqlPresentes, [idAula]);
@@ -273,9 +275,9 @@ const inserirAlunosPresentes = async (corpoPresencas) => {
 
 
 const alunosdeUmCurso = async (idCurso, idMateria) => {
-  const result = await connection.query("SELECT idalunos, gra, nome FROM alunos WHERE idcurso = ? AND idalunos NOT IN (SELECT alunos_idalunos FROM presencas WHERE materia_idmateria = ?)",idCurso, idMateria);
+  const result = await connection.query("SELECT idalunos, gra, nome FROM alunos WHERE idcurso = ? AND idalunos NOT IN (SELECT alunos_idalunos FROM presencas WHERE materia_idmateria = ?) ORDER BY nome ASC", [idCurso, idMateria]);
    if(result[0].length < 1){
-    return "Não há alunos nesse curso"
+    return []
    }else{
     return result[0];
    }
