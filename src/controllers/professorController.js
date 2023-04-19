@@ -131,10 +131,10 @@ const addAula = async (req, res) => {
 };
 
 const adicionarNaMateria = async (req, res) => {
-  const idAluno = req.body.idAluno;
   const idMateria = req.body.idMateria;
-  const result = await professorModel.adicionarNaMateria(idAluno,idMateria);
-  return res.status(201).json(result);
+  const alunos = req.body.alunos;
+  const results = await professorModel.adicionarNaMateria(idMateria, alunos);
+  return res.status(201).json(results);
 };
 
 const inserirHorario = async (req, res) => {

@@ -107,17 +107,28 @@ const updateQRAula = async (idAulas) => {
     return token;
   };
 
-const adicionarNaMateria = async (idAluno, idMateria) => {
-  if (idAluno !== undefined && idMateria !== undefined) {
-    await connection.query(
-      "INSERT INTO `presencas`(`alunos_idalunos`,`materia_idmateria`) VALUES (?,?)",
-      [idAluno, idMateria]
-    );
-    return "Adicionado com sucesso na aula";
-  } else {
-    return "O ID do aluno ou ID da Matéria são inválidos";
-  }
-};
+  const adicionarNaMateria = async (idMateria, alunos) => {
+    let successCount = 0;
+    let errorCount = 0;
+    for (let i = 0; i < alunos.length; i++) {
+      const idAluno = alunos[i];
+      try {
+        await connection.query(
+          "INSERT INTO `presencas`(`alunos_idalunos`,`materia_idmateria`) VALUES (?,?)",
+          [idAluno, idMateria]
+        );
+        successCount++;
+      } catch (error) {
+        errorCount++;
+      }
+    }
+    if (successCount > 0) {
+      return `Adicionados com sucesso ${successCount} alunos na aula`;
+    } else {
+      return "Nenhum aluno foi adicionado na aula";
+    }
+  };
+  
 
 const verHorariosMateria = async (idMateria) => {
   const corpoDiasHorarios = [[],[],[],[],[],[],[]]
