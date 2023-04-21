@@ -265,7 +265,9 @@ const verificarAlunosAula = async (idAula) => {
   };
   return resultadoTotal;
 };
+
 const inserirAlunosPresentes = async (corpoPresencas) => {
+  const aulaAberta = await connection.query("SELECT FROM aulas WHERE idAulas = ? AND finalizada != 1",[corpoPresencas["idAula"]])
   if (corpoPresencas.presentes.length > 0) {
     const listaPresentes = corpoPresencas["presentes"];  
     const listaPresentesQuery = [];
@@ -274,16 +276,20 @@ const inserirAlunosPresentes = async (corpoPresencas) => {
       listaPresentesQuery.push([listaPresentes[i]["idalunos"],corpoPresencas["idAula"],listaPresentes[i]["Carga"]])
       listaIDsPresentes.push(listaPresentes[i]["idalunos"])
     }
+    if(aulaAberta[0].length > 0){
+      await connection.query("UPDATE FROM aulas SET finalizada = 1 WHERE idAulas = ?", [corpoPresencas["idAula"]]);
+    }
     await connection.query("DELETE FROM alunospresentes WHERE aulas_idAulas = ?", [corpoPresencas["idAula"]])
     await connection.query("INSERT INTO alunospresentes (idalunos,aulas_idAulas,carga) VALUES ? ",[listaPresentesQuery]);
     return "ok";
   } else {
     await connection.query("DELETE FROM alunospresentes WHERE aulas_idAulas = ?", [corpoPresencas["idAula"]])
+    if(aulaAberta[0].length > 0){
+      await connection.query("UPDATE FROM aulas SET finalizada = 1 WHERE idAulas = ?", [corpoPresencas["idAula"]]);
+    }
     return "A propriedade 'presentes' não existe no objeto 'corpoPresencas'.";
   }
 }
-
-
 
 const alunosdeUmCurso = async (idCurso, idMateria) => {
   const result = await connection.query("SELECT idalunos, gra, nome FROM alunos WHERE idcurso = ? AND idalunos NOT IN (SELECT alunos_idalunos FROM presencas WHERE materia_idmateria = ?) ORDER BY nome ASC", [idCurso, idMateria]);
