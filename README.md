@@ -4,4 +4,8 @@ Visto que atualmente durante as aulas acadêmicas convencionais os professores l
 ## Tecnologias
 Node.js /   Flutter   /  MySql  /   Postman  <br>
  <img src="https://skillicons.dev/icons?i=nodejs" /> <img src="https://skillicons.dev/icons?i=flutter" /> <img src="https://skillicons.dev/icons?i=mysql" /> <img src="https://skillicons.dev/icons?i=postman" />
-## Desenvolvimento
+
+## Abordagem técnica
+O projeto segue o Padrão de Arquitetura MVC, que facilita bruscamente correção de erros e reúso de funcionalidades já criadas para determinada rota. Foram utilizados alguns pacotes como 'JWT' para gerar tokens em logins, 'bcrypt' para criptografia de senhas dos usuários, e foram utilizados WebSockets para o recebimento da lista de alunos presentem em tempo real. Todas as funcionalidades foram testadas durante a elaboração dos EndPoints, apesar do sistema ter sido descontinuado por prioridades acadêmicas pessoais. Inclusive esse projeto foi apresentados em disciplinas de Laborátorio de Software, podendo ser melhor visto a prática com vídeos pelo post do Instagram: https://www.instagram.com/p/CtfeiZIJ_xk/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA== 
+
+## ScreenShots
