@@ -14,6 +14,7 @@ Entretanto a opção de marcar a chamada manualmente seria disponível para o pr
 ## ScreenShots
 
 <div align="center">
-![WhatsApp Image 2023-08-01 at 2 17 44 PM](https://github.com/gustavo-mv/SISAC-Nodejs/assets/47462562/9aae17bf-c4bd-4a23-9862-66db256b23d0)
-![WhatsApp Image 2023-08-01 at 2 18 01 PM](https://github.com/gustavo-mv/SISAC-Nodejs/assets/47462562/0dfbdbfa-459c-4f57-9d45-f0927dd854a5)
+<img src="https://github.com/gustavo-mv/SISAC-Nodejs/assets/47462562/9aae17bf-c4bd-4a23-9862-66db256b23d0">
+<img src="https://github.com/gustavo-mv/SISAC-Nodejs/assets/47462562/0dfbdbfa-459c-4f57-9d45-f0927dd854a5">
 </div>
+
