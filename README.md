@@ -15,6 +15,6 @@ Entretanto a opção de marcar a chamada manualmente seria disponível para o pr
 
 <div align="center">
 <img src="https://github.com/gustavo-mv/SISAC-Nodejs/assets/47462562/9aae17bf-c4bd-4a23-9862-66db256b23d0">
-<img src="https://github.com/gustavo-mv/SISAC-Nodejs/assets/47462562/0dfbdbfa-459c-4f57-9d45-f0927dd854a5" width = "300px">
+<img src="https://github.com/gustavo-mv/SISAC-Nodejs/assets/47462562/0dfbdbfa-459c-4f57-9d45-f0927dd854a5" width="30px" />
 </div>
 
